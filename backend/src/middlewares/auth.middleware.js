@@ -1,11 +1,12 @@
 // verifica token Firebase
-const { auth } = require('../config/firebase');
+const { auth, db } = require('../config/firebase');
 const { AppError } = require('../utils/errorHandler');
 
 /**
  * Middleware per verificare il token Firebase ID
  * Estrae il token dall'header Authorization: Bearer <token>
- * Allega req.user con uid, email e claims
+ * Recupera il ruolo aggiornato da Firestore
+ * Allega req.user con uid, email, role e claims
  */
 const verifyToken = async (req, res, next) => {
     try {
@@ -24,12 +25,16 @@ const verifyToken = async (req, res, next) => {
         // Verifica il token con Firebase Admin
         const decodedToken = await auth.verifyIdToken(token);
 
+        // Recupera il ruolo aggiornato da Firestore
+        const userDoc = await db.collection('users').doc(decodedToken.uid).get();
+        const ruoloFirestore = userDoc.exists ? userDoc.data().ruolo : 'user';
+
         // Allega i dati utente alla richiesta
         req.user = {
             uid: decodedToken.uid,
             email: decodedToken.email,
             emailVerified: decodedToken.email_verified,
-            role: decodedToken.role || 'user', // custom claim
+            role: ruoloFirestore, // ruolo da Firestore (sempre aggiornato)
             claims: decodedToken
         };
 

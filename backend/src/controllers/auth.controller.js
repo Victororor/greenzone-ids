@@ -1,17 +1,101 @@
 // Controller per l'autenticazione
 const { auth, db } = require('../config/firebase');
 const userService = require('../services/user.service');
+const authService = require('../services/auth.service');
 const { AppError } = require('../utils/errorHandler');
 const { z } = require('zod');
 
-// Schema di validazione per registrazione
+// Schema di validazione per signup unificato
+const signupSchema = z.object({
+    email: z.string().email('Email non valida'),
+    password: z.string().min(6, 'Password deve avere almeno 6 caratteri'),
+    nome: z.string().min(2, 'Nome deve avere almeno 2 caratteri').max(50),
+    cognome: z.string().min(2, 'Cognome deve avere almeno 2 caratteri').max(50)
+});
+
+// Schema di validazione per login
+const loginSchema = z.object({
+    email: z.string().email('Email non valida'),
+    password: z.string().min(1, 'Password richiesta')
+});
+
+// Schema di validazione per registrazione (legacy)
 const registerSchema = z.object({
     nome: z.string().min(2, 'Nome deve avere almeno 2 caratteri').max(50),
     cognome: z.string().min(2, 'Cognome deve avere almeno 2 caratteri').max(50)
 });
 
 /**
- * POST /api/auth/register
+ * POST /api/auth/signup
+ * Registrazione unificata: crea account Firebase + profilo Firestore in un'unica chiamata
+ */
+const signup = async (req, res, next) => {
+    try {
+        const validatedData = signupSchema.parse(req.body);
+
+        const result = await authService.signup(validatedData);
+
+        res.status(201).json({
+            status: 'success',
+            message: 'Registrazione completata con successo',
+            data: result
+        });
+    } catch (error) {
+        if (error instanceof z.ZodError) {
+            return next(new AppError(error.errors[0].message, 400));
+        }
+        next(error);
+    }
+};
+
+/**
+ * POST /api/auth/login
+ * Login unificato: autentica e restituisce profilo + token
+ */
+const login = async (req, res, next) => {
+    try {
+        const validatedData = loginSchema.parse(req.body);
+
+        const result = await authService.login(validatedData);
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Login effettuato con successo',
+            data: result
+        });
+    } catch (error) {
+        if (error instanceof z.ZodError) {
+            return next(new AppError(error.errors[0].message, 400));
+        }
+        next(error);
+    }
+};
+
+/**
+ * POST /api/auth/refresh
+ * Rinnova il token usando il refreshToken
+ */
+const refresh = async (req, res, next) => {
+    try {
+        const { refreshToken } = req.body;
+
+        if (!refreshToken) {
+            return next(new AppError('refreshToken richiesto', 400));
+        }
+
+        const result = await authService.refreshToken(refreshToken);
+
+        res.status(200).json({
+            status: 'success',
+            data: result
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+/**
+ * POST /api/auth/register (legacy)
  * Registra il profilo utente in Firestore dopo che il client ha creato l'account in Firebase Auth
  * Il client invia il token Firebase dopo aver fatto signup
  */
@@ -129,6 +213,9 @@ const setUserRole = async (req, res, next) => {
 };
 
 module.exports = {
+    signup,
+    login,
+    refresh,
     register,
     verifySession,
     logout,
