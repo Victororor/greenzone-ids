@@ -12,8 +12,45 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "../styles/globalStyles";
+import { register } from "../services/auth";
 
 export default function RegisterScreen({ navigation }) {
+  const [nome, setNome] = useState("");
+  const [cognome, setCognome] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  async function handleRegister() {
+    if (!nome.trim() || !cognome.trim() || !email.trim() || !password) {
+      Alert.alert("Errore", "Per favore, compila tutti i campi.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const data = await register(
+        email.trim(),
+        password,
+        nome.trim(),
+        cognome.trim()
+      );
+      console.log("REGISTER OK:", data);
+      Alert.alert("Successo", "Registrazione effettuata! Effettua il login.");
+      navigation.replace("Login");
+    } catch (error) {
+      console.log("REGISTER ERROR:", error);
+      Alert.alert(
+        "Registrazione fallita",
+        error.message || "Si è verificato un errore."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
@@ -29,6 +66,8 @@ export default function RegisterScreen({ navigation }) {
           <View style={styles.inputWrapper}>
             <Ionicons name="person-outline" size={20} color="#6B7280" />
             <TextInput
+              value={nome}
+              onChangeText={setNome}
               placeholder="Nome"
               placeholderTextColor="#9CA3AF"
               style={styles.input}
@@ -39,6 +78,8 @@ export default function RegisterScreen({ navigation }) {
           <View style={styles.inputWrapper}>
             <Ionicons name="person-outline" size={20} color="#6B7280" />
             <TextInput
+              value={cognome}
+              onChangeText={setCognome}
               placeholder="Cognome"
               placeholderTextColor="#9CA3AF"
               style={styles.input}
@@ -49,6 +90,8 @@ export default function RegisterScreen({ navigation }) {
           <View style={styles.inputWrapper}>
             <Ionicons name="mail-outline" size={20} color="#6B7280" />
             <TextInput
+              value={email}
+              onChangeText={setEmail}
               placeholder="Email"
               placeholderTextColor="#9CA3AF"
               autoCapitalize="none"
@@ -61,19 +104,31 @@ export default function RegisterScreen({ navigation }) {
           <View style={styles.inputWrapper}>
             <Ionicons name="lock-closed-outline" size={20} color="#6B7280" />
             <TextInput
+              value={password}
+              onChangeText={setPassword}
               placeholder="Password"
               placeholderTextColor="#9CA3AF"
-              secureTextEntry
+              secureTextEntry={!showPassword}
               style={styles.input}
             />
+            <Pressable onPress={() => setShowPassword(!showPassword)}>
+              <Ionicons
+                name={showPassword ? "eye-off-outline" : "eye-outline"}
+                size={20}
+                color="#6B7280"
+              />
+            </Pressable>
           </View>
 
           {/* REGISTER BUTTON */}
           <Pressable
-            style={styles.button}
-            onPress={() => Alert.alert("Registrazione effettuata!")}
+            style={[styles.button, loading && { opacity: 0.7 }]}
+            onPress={handleRegister}
+            disabled={loading}
           >
-            <Text style={styles.buttonText}>Registrati</Text>
+            <Text style={styles.buttonText}>
+              {loading ? "Registrazione..." : "Registrati"}
+            </Text>
           </Pressable>
 
           <View
