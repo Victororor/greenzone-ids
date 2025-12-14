@@ -84,7 +84,7 @@ export default StyleSheet.create({
   fontWeight: "400",
   color: "#6B7280",
   textAlign: "center",
-  marginBottom: 36,
+  marginBottom: 20,
   letterSpacing: 0.2,
 },
 });

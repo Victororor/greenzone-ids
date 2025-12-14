@@ -51,7 +51,7 @@ export default function LoginScreen({ navigation }) {
 
           {/* EMAIL */}
           <View style={styles.inputWrapper}>
-            <Ionicons name="person-outline" size={20} color="#6B7280" />
+            <Ionicons name="mail-outline" size={20} color="#6B7280" />
             <TextInput
               value={email}
               onChangeText={setEmail}
