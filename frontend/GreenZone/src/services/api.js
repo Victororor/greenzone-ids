@@ -1,4 +1,4 @@
-export const apiBaseUrl = "http://192.168.3.247:3000";
+export const apiBaseUrl = "http://172.20.10.3:3000";
 
 export async function apiPost(endpoint, body) {
   const response = await fetch(`${apiBaseUrl}${endpoint}`, {
