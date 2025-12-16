@@ -27,7 +27,7 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      {/* MAPPA (la montiamo comunque, ma la nascondiamo finché non è pronta) */}
+      {/* MAPPA */}
       {location && (
         <MapView
           style={[

@@ -47,7 +47,7 @@ export default function BottomBar() {
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    bottom: 40, // puoi mettere 0 se non vuoi rialzarla
+    bottom: 40,
     left: 0,
     right: 0,
     height: TAB_BAR_HEIGHT,

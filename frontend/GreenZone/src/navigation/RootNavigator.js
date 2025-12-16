@@ -13,10 +13,10 @@ export default function RootNavigator() {
     return (
         <Stack.Navigator initialRouteName="Map">
             <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false}} />
-            <Stack.Screen name="Map" component={MapScreen} options={{ headerShown: true}} />
+            <Stack.Screen name="Map" component={MapScreen} options={{ headerShown: true, headerBackVisible: false , headerLeft: () => null }} />
             <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false}} />
-            <Stack.Screen name="Favourite" component={FavouriteScreen} options={{ headerShown: true}} />
-            <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: true}} />
+            <Stack.Screen name="Favourite" component={FavouriteScreen} options={{ headerShown: true, headerBackVisible: false, headerLeft: () => null }} />
+            <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: true,headerBackVisible: false,headerLeft: () => null }} />
         </Stack.Navigator>
     );
 }
