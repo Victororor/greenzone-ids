@@ -22,7 +22,10 @@ export default function BottomBar() {
         />
       </Pressable>
 
-      <Pressable style={styles.item} onPress={() => navigation.navigate("Favourite")}>
+      <Pressable
+        style={styles.item}
+        onPress={() => navigation.navigate("Favourite")}
+      >
         <Ionicons
           name={isActive("Favourite") ? "heart" : "heart-outline"}
           size={26}

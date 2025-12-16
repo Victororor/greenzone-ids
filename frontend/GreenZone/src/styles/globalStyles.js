@@ -80,11 +80,11 @@ export default StyleSheet.create({
     color: "#14948B",
   },
   subtitle: {
-  fontSize: 15,
-  fontWeight: "400",
-  color: "#6B7280",
-  textAlign: "center",
-  marginBottom: 20,
-  letterSpacing: 0.2,
-},
+    fontSize: 15,
+    fontWeight: "400",
+    color: "#6B7280",
+    textAlign: "center",
+    marginBottom: 20,
+    letterSpacing: 0.2,
+  },
 });
