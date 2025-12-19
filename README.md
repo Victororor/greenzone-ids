@@ -4,6 +4,16 @@ Applicazione web per identificare e condividere luoghi "bio" e sostenibili sulla
 
 ---
 
+## Legenda
+
+| Simbolo | Significato |
+|---------|-------------|
+| 🔒 | Richiede header `Authorization: Bearer <idToken>` |
+| 🔒 Admin | Solo utenti con ruolo `admin` |
+| 🔒 Owner/Admin | Solo il creatore della risorsa o admin |
+
+---
+
 # Backend API
 
 **Base URL:** `http://localhost:3000`
@@ -429,17 +439,3 @@ Ripristina un luogo precedentemente eliminato con soft delete.
 | 500 | Internal Server Error | Errore interno del server |
 
 ---
-
-## Legenda
-
-| Simbolo | Significato |
-|---------|-------------|
-| 🔒 | Richiede header `Authorization: Bearer <idToken>` |
-| 🔒 Admin | Solo utenti con ruolo `admin` |
-| 🔒 Owner/Admin | Solo il creatore della risorsa o admin |
-
----
-
-# Frontend
-
-*Da completare*
