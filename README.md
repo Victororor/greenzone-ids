@@ -51,7 +51,7 @@ Autentica un utente esistente e restituisce i token di accesso.
 
 ```json
 {
-  "email": "mario@email.com",
+  "email": "mario.rossi@test.com",
   "password": "Password123!"
 }
 ```
