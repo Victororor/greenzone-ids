@@ -3,7 +3,6 @@ import {
   View,
   Text,
   TextInput,
-  StyleSheet,
   Image,
   Pressable,
   Alert,
@@ -11,10 +10,12 @@ import {
   Keyboard,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { login } from "../services/auth";
+import { login, getMe } from "../services/auth";
 import styles from "../styles/globalStyles";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen({ navigation, route }) {
+  const { setIsLogged } = route.params;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -28,12 +29,38 @@ export default function LoginScreen({ navigation }) {
 
     try {
       setLoading(true);
-      const data = await login(email.trim(), password);
-      console.log("LOGIN OK:", data);
 
-      // TODO: qui poi salvi token ecc.
+      // 1) Login backend (ti ritorna idToken, refreshToken e user)
+      const res = await login(email.trim(), password);
+      console.log("LOGIN OK:", res);
 
-      navigation.replace("Home");
+      const token = res?.data?.idToken;
+      const refreshToken = res?.data?.refreshToken;
+      let user = res?.data?.user;
+
+      if (!token) {
+        throw new Error("Token mancante nella risposta del login");
+      }
+
+      // 2) Salva token/refresh
+      await AsyncStorage.setItem("token", token);
+      if (refreshToken) {
+        await AsyncStorage.setItem("refreshToken", refreshToken);
+      }
+
+      // 3) Se il backend NON ti ha dato user, lo prendi con /api/users/me
+      if (!user) {
+        const meRes = await getMe(token);
+        user = meRes?.data?.user;
+      }
+
+      // 4) Salva profilo (nome/cognome/email/ruolo/uid)
+      if (user) {
+        await AsyncStorage.setItem("user", JSON.stringify(user));
+      }
+
+      // 5) Switch stack -> MapScreen (tramite RootNavigator)
+      setIsLogged(true);
     } catch (error) {
       console.log("LOGIN ERROR:", error);
       Alert.alert("Login fallito", error.message || "Credenziali non valide.");
@@ -103,7 +130,6 @@ export default function LoginScreen({ navigation }) {
             }}
           >
             <View style={{ flex: 1, height: 5, backgroundColor: "#D1D5DB" }} />
-
             <View style={{ flex: 1, height: 5, backgroundColor: "#D1D5DB" }} />
           </View>
 

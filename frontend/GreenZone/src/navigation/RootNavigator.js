@@ -1,53 +1,62 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import MapScreen from "../screens/MapScreen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
+import MapScreen from "../screens/MapScreen";
 import FavouriteScreen from "../screens/FavouriteScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 
 const Stack = createNativeStackNavigator();
 
-export default function RootNavigator() {
+function AuthStack({ setIsLogged }) {
   return (
-    <Stack.Navigator initialRouteName="Map">
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen
         name="Login"
         component={LoginScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Map"
-        component={MapScreen}
-        options={{
-          headerShown: true,
-          headerBackVisible: false,
-          headerLeft: () => null,
-        }}
+        initialParams={{ setIsLogged }}
       />
       <Stack.Screen
         name="Register"
         component={RegisterScreen}
-        options={{ headerShown: false }}
+        initialParams={{ setIsLogged }}
       />
-      <Stack.Screen
-        name="Favourite"
-        component={FavouriteScreen}
-        options={{
-          headerShown: true,
-          headerBackVisible: false,
-          headerLeft: () => null,
-        }}
-      />
+    </Stack.Navigator>
+  );
+}
+
+function AppStack({ setIsLogged }) {
+  return (
+    <Stack.Navigator screenOptions={{headerBackVisible: false, headerLeft: () => null,}}>
+      <Stack.Screen name="Map" component={MapScreen} />
+      <Stack.Screen name="Favourite" component={FavouriteScreen} />
       <Stack.Screen
         name="Profile"
         component={ProfileScreen}
-        options={{
-          headerShown: true,
-          headerBackVisible: false,
-          headerLeft: () => null,
-        }}
+        initialParams={{ setIsLogged }}
       />
     </Stack.Navigator>
+  );
+}
+
+export default function RootNavigator() {
+  const [isLogged, setIsLogged] = useState(null);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const value = await AsyncStorage.getItem("logged");
+      setIsLogged(value === "1");
+    };
+    checkAuth();
+  }, []);
+
+  if (isLogged === null) return null;
+
+  return isLogged ? (
+    <AppStack setIsLogged={setIsLogged} />
+  ) : (
+    <AuthStack setIsLogged={setIsLogged} />
   );
 }
