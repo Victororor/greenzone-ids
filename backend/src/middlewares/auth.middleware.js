@@ -76,4 +76,36 @@ const requireSelfOrAdmin = (req, res, next) => {
     return next(new AppError('Accesso negato: non autorizzato', 403));
 };
 
-module.exports = { verifyToken, requireAdmin, requireSelfOrAdmin };
+/**
+ * Middleware per verificare che l'utente sia il creatore del place o admin
+ */
+const requirePlaceOwnerOrAdmin = async (req, res, next) => {
+    try {
+        const placeId = req.params.id;
+
+        if (!placeId) {
+            return next(new AppError('ID luogo mancante', 400));
+        }
+
+        // Recupera il place da Firestore
+        const placeDoc = await db.collection('places').doc(placeId).get();
+
+        if (!placeDoc.exists) {
+            return next(new AppError('Luogo non trovato', 404));
+        }
+
+        const place = placeDoc.data();
+
+        // Verifica se l'utente è il creatore o admin
+        if (req.user && (req.user.uid === place.createdBy || req.user.role === 'admin')) {
+            req.place = { id: placeDoc.id, ...place };
+            return next();
+        }
+
+        return next(new AppError('Accesso negato: non sei il proprietario di questo luogo', 403));
+    } catch (error) {
+        return next(new AppError('Errore nella verifica dei permessi', 500));
+    }
+};
+
+module.exports = { verifyToken, requireAdmin, requireSelfOrAdmin, requirePlaceOwnerOrAdmin };
