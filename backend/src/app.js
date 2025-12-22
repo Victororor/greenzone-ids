@@ -16,6 +16,7 @@ const { errorHandler, notFoundHandler } = require('./utils/errorHandler');
 // importa routes
 const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
+const placeRoutes = require('./routes/place.routes');
 
 const app = express();
 
@@ -65,7 +66,8 @@ app.get('/', (req, res) => {
         endpoints: {
             health: '/health',
             auth: '/api/auth',
-            users: '/api/users'
+            users: '/api/users',
+            places: '/api/places'
         }
     });
 });
@@ -78,6 +80,7 @@ app.get('/health', (req, res) => {
 // monta routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/places', placeRoutes);
 
 // 404 handler
 app.use(notFoundHandler);
