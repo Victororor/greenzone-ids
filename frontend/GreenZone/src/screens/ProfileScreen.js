@@ -31,11 +31,13 @@ export default function ProfileScreen({ route }) {
       <View style={styles.avatarWrapper}>
         <Ionicons name="person-circle-outline" size={110} color="#111827" />
 
-        {/* 👇 Nome e Cognome reali */}
+        {/* Nome e Cognome*/}
         <Text style={styles.name}>
           {user ? `${user.nome} ${user.cognome}` : "Profilo"}
         </Text>
       </View>
+
+      
 
       {/* LOGOUT */}
       <Pressable style={styles.logoutButton} onPress={handleLogout}>

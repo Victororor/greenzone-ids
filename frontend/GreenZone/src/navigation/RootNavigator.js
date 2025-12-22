@@ -7,6 +7,8 @@ import RegisterScreen from "../screens/RegisterScreen";
 import MapScreen from "../screens/MapScreen";
 import FavouriteScreen from "../screens/FavouriteScreen";
 import ProfileScreen from "../screens/ProfileScreen";
+import { Pressable } from "react-native";
+
 
 const Stack = createNativeStackNavigator();
 
@@ -29,7 +31,7 @@ function AuthStack({ setIsLogged }) {
 
 function AppStack({ setIsLogged }) {
   return (
-    <Stack.Navigator screenOptions={{headerBackVisible: false, headerLeft: () => null,}}>
+    <Stack.Navigator screenOptions={{headerBackVisible: false, headerLeft: () => null}}>
       <Stack.Screen name="Map" component={MapScreen} />
       <Stack.Screen name="Favourite" component={FavouriteScreen} />
       <Stack.Screen
