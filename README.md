@@ -439,3 +439,56 @@ Ripristina un luogo precedentemente eliminato con soft delete.
 | 500 | Internal Server Error | Errore interno del server |
 
 ---
+
+## Test Cases
+
+### TC-01 – Registrazione
+
+| Campo | Descrizione |
+|-------|-------------|
+| ID Test | TC-01 |
+| Requisito associato | RF-01 – Registrazione |
+| Obiettivo del test | Verificare che l'utente possa registrare correttamente un nuovo account |
+| Pre-Condizione | App installata; Connessione attiva; email non già registrata |
+| Input | Email valida, password validata, eventuali dati aggiuntivi |
+| Procedura | L'utente compila i campi e conferma la registrazione |
+| Output atteso | Messaggio di conferma o accesso automatico nell'app |
+| Post-Condizione | Utente presente nel database su Firebase |
+| Esito | Superato |
+| Priorità | Alta |
+
+---
+
+### TC-02 – Login
+
+| Campo | Descrizione |
+|-------|-------------|
+| ID Test | TC-02 |
+| Requisito associato | RF-02 – Login |
+| Obiettivo del test | Verificare l'accesso con credenziali corrette e gestione degli errori |
+| Pre-Condizione | Account registrato nel database |
+| Input | E-mail e password |
+| Procedura | Inserire le credenziali e premere "Accedi" |
+| Output atteso | Accesso alla schermata principale o errore se credenziali errate |
+| Post-Condizione | Sessione utente attiva |
+| Esito | Superato |
+| Priorità | Alta |
+
+---
+
+### TC-03 – Mappa dei luoghi sostenibili
+
+| Campo | Descrizione |
+|-------|-------------|
+| ID Test | TC-03 |
+| Requisito associato | RF-03 – Mappa dei luoghi sostenibili |
+| Obiettivo del test | Verificare che la mappa venga caricata correttamente con i marker |
+| Pre-Condizione | Connessione attiva; permesso GPS concesso; luoghi presenti nel database |
+| Input | Apertura schermata "Mappa" |
+| Procedura | Accedere alla schermata mappa |
+| Output atteso | Mappa visibile, marker correttamente posizionati |
+| Post-Condizione | Mappa utilizzabile |
+| Esito | Superato |
+| Priorità | Alta |
+
+---
