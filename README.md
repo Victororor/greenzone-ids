@@ -492,3 +492,122 @@ Ripristina un luogo precedentemente eliminato con soft delete.
 | Priorità | Alta |
 
 ---
+
+### TC-04 – Filtri
+
+| Campo | Descrizione |
+|-------|-------------|
+| ID Test | TC-04 |
+| Requisito associato | RF-04 – Filtri |
+| Obiettivo del test | Verificare la corretta applicazione dei filtri di categoria e distanza |
+| Pre-Condizione | Mappa e marker caricati |
+| Input | Categoria selezionata o range distanza |
+| Procedura | Applicare il filtro nel pannello dedicato |
+| Output atteso | Marker aggiornati in base ai filtri |
+| Post-Condizione | Filtri attivi finché non rimossi |
+| Esito | Superato |
+| Priorità | Media |
+
+---
+
+### TC-05 – Percorso
+
+| Campo | Descrizione |
+|-------|-------------|
+| ID Test | TC-05 |
+| Requisito associato | RF-05 – Percorso |
+| Obiettivo del test | Verificare il calcolo del percorso a piedi/in bici tramite Maps API |
+| Pre-Condizione | GPS attivo; luogo selezionato sulla mappa |
+| Input | Selezione luogo di destinazione |
+| Procedura | Premere il pulsante "Indicazioni" |
+| Output atteso | Percorso visualizzato sulla mappa con tempo stimato |
+| Post-Condizione | Percorso attivo fino a nuova selezione |
+| Esito | Superato |
+| Priorità | Media |
+
+---
+
+### TC-06 – Segnalazione luogo
+
+| Campo | Descrizione |
+|-------|-------------|
+| ID Test | TC-06 |
+| Requisito associato | RF-06 – Segnalazione luogo |
+| Obiettivo del test | Verificare l'inserimento corretto di una nuova segnalazione |
+| Pre-Condizione | Utente autenticato; connessione attiva |
+| Input | Nome luogo, categoria, posizione, descrizione |
+| Procedura | Aprire "Segnala luogo", compilare e inviare |
+| Output atteso | Conferma inserimento o messaggio di errore |
+| Post-Condizione | Nuovo luogo registrato in Firebase |
+| Esito | Superato |
+| Priorità | Alta |
+
+---
+
+### TC-07 – Modifica/Eliminazione
+
+| Campo | Descrizione |
+|-------|-------------|
+| ID Test | TC-07 |
+| Requisito associato | RF-07 – Modifica/Eliminazione |
+| Obiettivo del test | Verificare la modifica e eliminazione di un luogo |
+| Pre-Condizione | Utente autenticato; luogo esistente creato dall'utente |
+| Input | Dati modificati o conferma eliminazione |
+| Procedura | Selezionare luogo, modificare/eliminare |
+| Output atteso | Conferma operazione o messaggio di errore |
+| Post-Condizione | Luogo aggiornato o rimosso da Firebase |
+| Esito | Superato |
+| Priorità | Alta |
+
+---
+
+### TC-08 – Preferiti
+
+| Campo | Descrizione |
+|-------|-------------|
+| ID Test | TC-08 |
+| Requisito associato | RF-08 – Preferiti |
+| Obiettivo del test | Verificare l'aggiunta e rimozione di un luogo dai preferiti |
+| Pre-Condizione | Utente autenticato |
+| Input | Tap su icona preferito |
+| Procedura | Aprire luogo → premere icona "Preferito" |
+| Output atteso | Lista preferiti aggiornata |
+| Post-Condizione | Stato preferito sincronizzato su Firebase |
+| Esito | Superato |
+| Priorità | Bassa |
+
+---
+
+### TC-09 – Profilo
+
+| Campo | Descrizione |
+|-------|-------------|
+| ID Test | TC-09 |
+| Requisito associato | RF-09 – Profilo |
+| Obiettivo del test | Verificare la corretta visualizzazione del profilo utente |
+| Pre-Condizione | Utente autenticato |
+| Input | Apertura schermata profilo |
+| Procedura | Navigare alla sezione "Profilo" |
+| Output atteso | Dati utente visualizzati correttamente |
+| Post-Condizione | Profilo consultabile |
+| Esito | Superato |
+| Priorità | Media |
+
+---
+
+### TC-10 – Logout
+
+| Campo | Descrizione |
+|-------|-------------|
+| ID Test | TC-10 |
+| Requisito associato | RF-10 – Logout |
+| Obiettivo del test | Verificare la corretta terminazione della sessione |
+| Pre-Condizione | Utente autenticato |
+| Input | Comando di logout |
+| Procedura | Premere "Logout" dal menu o profilo |
+| Output atteso | Ritornare alla schermata iniziale/login |
+| Post-Condizione | Sessione invalidata |
+| Esito | Superato |
+| Priorità | Alta |
+
+---
