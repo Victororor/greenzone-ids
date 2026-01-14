@@ -18,6 +18,7 @@ Applicazione per identificare e condividere luoghi "bio" e sostenibili sulla map
 - [Schemi Firestore](#schemi-firestore)
 - [Codici Errore](#codici-errore)
 - [Rate Limiting](#rate-limiting)
+- [Test Cases](#test-cases)
 
 ---
 
@@ -1081,5 +1082,177 @@ Elimina definitivamente una segnalazione.
 |----------|--------|----------|
 | `/api/*` (globale) | 100 richieste | 15 minuti |
 | `/api/auth/*` | 10 richieste | 1 ora |
+
+---
+
+## Test Cases
+
+### TC-01 – Registrazione
+
+| Campo | Descrizione |
+|-------|-------------|
+| ID Test | TC-01 |
+| Requisito associato | RF-01 – Registrazione |
+| Obiettivo del test | Verificare che l'utente possa registrare correttamente un nuovo account |
+| Pre-Condizione | App installata; Connessione attiva; email non già registrata |
+| Input | Email valida, password validata, eventuali dati aggiuntivi |
+| Procedura | L'utente compila i campi e conferma la registrazione |
+| Output atteso | Messaggio di conferma o accesso automatico nell'app |
+| Post-Condizione | Utente presente nel database su Firebase |
+| Esito | Superato |
+| Priorità | Alta |
+
+---
+
+### TC-02 – Login
+
+| Campo | Descrizione |
+|-------|-------------|
+| ID Test | TC-02 |
+| Requisito associato | RF-02 – Login |
+| Obiettivo del test | Verificare l'accesso con credenziali corrette e gestione degli errori |
+| Pre-Condizione | Account registrato nel database |
+| Input | E-mail e password |
+| Procedura | Inserire le credenziali e premere "Accedi" |
+| Output atteso | Accesso alla schermata principale o errore se credenziali errate |
+| Post-Condizione | Sessione utente attiva |
+| Esito | Superato |
+| Priorità | Alta |
+
+---
+
+### TC-03 – Mappa dei luoghi sostenibili
+
+| Campo | Descrizione |
+|-------|-------------|
+| ID Test | TC-03 |
+| Requisito associato | RF-03 – Mappa dei luoghi sostenibili |
+| Obiettivo del test | Verificare che la mappa venga caricata correttamente con i marker |
+| Pre-Condizione | Connessione attiva; permesso GPS concesso; luoghi presenti nel database |
+| Input | Apertura schermata "Mappa" |
+| Procedura | Accedere alla schermata mappa |
+| Output atteso | Mappa visibile, marker correttamente posizionati |
+| Post-Condizione | Mappa utilizzabile |
+| Esito | Superato |
+| Priorità | Alta |
+
+---
+
+### TC-04 – Filtri
+
+| Campo | Descrizione |
+|-------|-------------|
+| ID Test | TC-04 |
+| Requisito associato | RF-04 – Filtri |
+| Obiettivo del test | Verificare la corretta applicazione dei filtri di categoria e distanza |
+| Pre-Condizione | Mappa e marker caricati |
+| Input | Categoria selezionata o range distanza |
+| Procedura | Applicare il filtro nel pannello dedicato |
+| Output atteso | Marker aggiornati in base ai filtri |
+| Post-Condizione | Filtri attivi finché non rimossi |
+| Esito | Superato |
+| Priorità | Media |
+
+---
+
+### TC-05 – Percorso
+
+| Campo | Descrizione |
+|-------|-------------|
+| ID Test | TC-05 |
+| Requisito associato | RF-05 – Percorso |
+| Obiettivo del test | Verificare il calcolo del percorso a piedi/in bici tramite Maps API |
+| Pre-Condizione | GPS attivo; luogo selezionato sulla mappa |
+| Input | Selezione luogo di destinazione |
+| Procedura | Premere il pulsante "Indicazioni" |
+| Output atteso | Percorso visualizzato sulla mappa con tempo stimato |
+| Post-Condizione | Percorso attivo fino a nuova selezione |
+| Esito | Superato |
+| Priorità | Media |
+
+---
+
+### TC-06 – Segnalazione luogo
+
+| Campo | Descrizione |
+|-------|-------------|
+| ID Test | TC-06 |
+| Requisito associato | RF-06 – Segnalazione luogo |
+| Obiettivo del test | Verificare l'inserimento corretto di una nuova segnalazione |
+| Pre-Condizione | Utente autenticato; connessione attiva |
+| Input | Nome luogo, categoria, posizione, descrizione |
+| Procedura | Aprire "Segnala luogo", compilare e inviare |
+| Output atteso | Conferma inserimento o messaggio di errore |
+| Post-Condizione | Nuovo luogo registrato in Firebase |
+| Esito | Superato |
+| Priorità | Alta |
+
+---
+
+### TC-07 – Modifica/Eliminazione
+
+| Campo | Descrizione |
+|-------|-------------|
+| ID Test | TC-07 |
+| Requisito associato | RF-07 – Modifica/Eliminazione |
+| Obiettivo del test | Verificare la modifica e eliminazione di un luogo |
+| Pre-Condizione | Utente autenticato; luogo esistente creato dall'utente |
+| Input | Dati modificati o conferma eliminazione |
+| Procedura | Selezionare luogo, modificare/eliminare |
+| Output atteso | Conferma operazione o messaggio di errore |
+| Post-Condizione | Luogo aggiornato o rimosso da Firebase |
+| Esito | Superato |
+| Priorità | Alta |
+
+---
+
+### TC-08 – Preferiti
+
+| Campo | Descrizione |
+|-------|-------------|
+| ID Test | TC-08 |
+| Requisito associato | RF-08 – Preferiti |
+| Obiettivo del test | Verificare l'aggiunta e rimozione di un luogo dai preferiti |
+| Pre-Condizione | Utente autenticato |
+| Input | Tap su icona preferito |
+| Procedura | Aprire luogo → premere icona "Preferito" |
+| Output atteso | Lista preferiti aggiornata |
+| Post-Condizione | Stato preferito sincronizzato su Firebase |
+| Esito | Superato |
+| Priorità | Bassa |
+
+---
+
+### TC-09 – Profilo
+
+| Campo | Descrizione |
+|-------|-------------|
+| ID Test | TC-09 |
+| Requisito associato | RF-09 – Profilo |
+| Obiettivo del test | Verificare la corretta visualizzazione del profilo utente |
+| Pre-Condizione | Utente autenticato |
+| Input | Apertura schermata profilo |
+| Procedura | Navigare alla sezione "Profilo" |
+| Output atteso | Dati utente visualizzati correttamente |
+| Post-Condizione | Profilo consultabile |
+| Esito | Superato |
+| Priorità | Media |
+
+---
+
+### TC-10 – Logout
+
+| Campo | Descrizione |
+|-------|-------------|
+| ID Test | TC-10 |
+| Requisito associato | RF-10 – Logout |
+| Obiettivo del test | Verificare la corretta terminazione della sessione |
+| Pre-Condizione | Utente autenticato |
+| Input | Comando di logout |
+| Procedura | Premere "Logout" dal menu o profilo |
+| Output atteso | Ritornare alla schermata iniziale/login |
+| Post-Condizione | Sessione invalidata |
+| Esito | Superato |
+| Priorità | Alta |
 
 ---
