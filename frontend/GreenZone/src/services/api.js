@@ -1,12 +1,11 @@
 export const apiBaseUrl = "http://192.168.3.122:3000";
 
-export async function apiPost(endpoint, body) {
+export async function apiPost(endpoint, body = {}, headers = {}) {
   const url = `${apiBaseUrl}${endpoint}`;
-  console.log("🔗 Chiamo:", url);
 
   const response = await fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...headers },
     body: JSON.stringify(body),
   });
 

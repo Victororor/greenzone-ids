@@ -7,3 +7,9 @@ export function login(email, password) {
 export function register(email, password, nome, cognome) {
   return apiPost("/api/auth/signup", { email, password, nome, cognome });
 }
+
+export function logout(idToken) {
+  return apiPost("/api/auth/logout", {}, {
+    Authorization: `Bearer ${idToken}`,
+  });
+}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { login } from "../services/auth";
 import styles from "../styles/globalStyles";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
@@ -31,9 +32,12 @@ export default function LoginScreen({ navigation }) {
       const data = await login(email.trim(), password);
       console.log("LOGIN OK:", data);
 
-      if (data.data.user.ruolo === "admin") {
+      await AsyncStorage.setItem("idToken", data.data.idToken);
+      await AsyncStorage.setItem("ruolo", data.data.user.ruolo);
+
+      const ruolo = data.data.user.ruolo;
+      if (ruolo === "admin") {
         navigation.replace("Admin");
-        return;
       } else {
         navigation.replace("Map");
       }
