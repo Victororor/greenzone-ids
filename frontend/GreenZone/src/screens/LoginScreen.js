@@ -31,12 +31,19 @@ export default function LoginScreen({ navigation }) {
       const data = await login(email.trim(), password);
       console.log("LOGIN OK:", data);
 
-      // TODO: qui poi salvi token ecc.
+      if (data.data.user.ruolo === "admin") {
+        navigation.replace("Admin");
+        return;
+      } else {
+        navigation.replace("Map");
+      }
 
-      navigation.replace("Home");
     } catch (error) {
-      console.log("LOGIN ERROR:", error);
-      Alert.alert("Login fallito", error.message || "Credenziali non valide.");
+      console.error("LOGIN ERROR:", error);
+      Alert.alert(
+        "Errore di accesso",
+        error.response?.data?.message || "Si è verificato un errore. Riprova."
+      );
     } finally {
       setLoading(false);
     }

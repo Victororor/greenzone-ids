@@ -5,12 +5,13 @@ import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import FavouriteScreen from "../screens/FavouriteScreen";
 import ProfileScreen from "../screens/ProfileScreen";
+import AdminScreen from "../screens/AdminScreen";
 
 const Stack = createNativeStackNavigator();
 
 export default function RootNavigator() {
   return (
-    <Stack.Navigator initialRouteName="Map">
+    <Stack.Navigator initialRouteName="Login">
       <Stack.Screen
         name="Login"
         component={LoginScreen}
@@ -42,6 +43,15 @@ export default function RootNavigator() {
       <Stack.Screen
         name="Profile"
         component={ProfileScreen}
+        options={{
+          headerShown: true,
+          headerBackVisible: false,
+          headerLeft: () => null,
+        }}
+      />
+      <Stack.Screen
+        name="Admin"
+        component={AdminScreen}
         options={{
           headerShown: true,
           headerBackVisible: false,
