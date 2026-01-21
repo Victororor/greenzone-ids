@@ -13,3 +13,7 @@ export function logout(idToken) {
     Authorization: `Bearer ${idToken}`,
   });
 }
+
+export function refresh(refreshToken) {
+  return apiPost("/api/auth/refresh", { refreshToken });
+}

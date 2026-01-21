@@ -6,12 +6,13 @@ import RegisterScreen from "../screens/RegisterScreen";
 import FavouriteScreen from "../screens/FavouriteScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import AdminScreen from "../screens/AdminScreen";
+import LoadingScreen from "../screens/LoadingScreen";
 
 const Stack = createNativeStackNavigator();
 
 export default function RootNavigator() {
   return (
-    <Stack.Navigator initialRouteName="Login">
+    <Stack.Navigator initialRouteName="Loading">
       <Stack.Screen
         name="Login"
         component={LoginScreen}
@@ -57,6 +58,11 @@ export default function RootNavigator() {
           headerBackVisible: false,
           headerLeft: () => null,
         }}
+      />
+      <Stack.Screen
+        name="Loading"
+        component={LoadingScreen}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );

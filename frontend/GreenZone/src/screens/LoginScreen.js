@@ -33,8 +33,9 @@ export default function LoginScreen({ navigation }) {
       console.log("LOGIN OK:", data);
 
       await AsyncStorage.setItem("idToken", data.data.idToken);
+      await AsyncStorage.setItem("refreshToken", data.data.refreshToken);
       await AsyncStorage.setItem("ruolo", data.data.user.ruolo);
-
+      
       const ruolo = data.data.user.ruolo;
       if (ruolo === "admin") {
         navigation.replace("Admin");
