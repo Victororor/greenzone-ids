@@ -43,13 +43,6 @@ export default function HomeScreen() {
           showsUserLocation
           onMapReady={() => setMapReady(true)}
         >
-          <Marker
-            coordinate={{
-              latitude: location.latitude + 0.002,
-              longitude: location.longitude + 0.002,
-            }}
-            title="Punto Green"
-          />
         </MapView>
       )}
 

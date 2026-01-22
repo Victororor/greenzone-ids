@@ -51,10 +51,6 @@ export default function ProfileScreen() {
 
         <Text style={styles.sectionTitle}>App</Text>
 
-        <Pressable style={styles.item} onPress={() => goTo("Notifications")}>
-          <Text style={styles.itemText}>Preferiti</Text>
-        </Pressable>
-
         <Pressable style={styles.item} onPress={() => goTo("Preferences")}>
           <Text style={styles.itemText}>Segnala un luogo</Text>
         </Pressable>
