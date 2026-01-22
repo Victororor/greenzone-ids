@@ -8,6 +8,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 import AdminScreen from "../screens/AdminScreen";
 import LoadingScreen from "../screens/LoadingScreen";
 import PersonalInformationScreen from "../screens/PersonalInformationScreen";
+import InfoAppScreen from "../screens/InfoAppScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -73,6 +74,15 @@ export default function RootNavigator() {
           headerBackTitle: "Indietro",
         }}
       />
+      <Stack.Screen
+        name="About"
+        component={InfoAppScreen}
+        options={{
+          title: "Info App",
+          headerBackTitle: "Indietro",
+        }}
+      />
+
     </Stack.Navigator>
   );
 }
