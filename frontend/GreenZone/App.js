@@ -27,7 +27,7 @@ export default function App() {
           clearInterval(interval);
 
         }
-      }, 15 * 60 * 1000); // ogni 15 minuti
+      }, 55 * 60 * 1000); // ogni 55 minuti
 
     return () => clearInterval(interval);
     }

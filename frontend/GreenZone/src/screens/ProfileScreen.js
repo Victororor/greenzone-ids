@@ -40,9 +40,6 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.info}>{nome} {cognome}</Text>
-      </View>
 
       <ScrollView contentContainerStyle={styles.inner}>
         

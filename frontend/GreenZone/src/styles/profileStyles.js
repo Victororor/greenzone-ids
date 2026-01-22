@@ -5,31 +5,31 @@ export default StyleSheet.create({
     flex: 1,
   },
   header: {
-    paddingTop: 20,
+    paddingTop: 10,
     paddingHorizontal: 20,
   },
   info: {
-    fontSize: 30,
+    fontSize: 20,
     fontWeight: "600",
   },
   inner: {
-    paddingTop: 10,
+    paddingTop: 0,
     paddingHorizontal: 20,
     paddingBottom: 100,
   },
   sectionTitle: {
-    fontSize: 14,
+    fontSize: 30,
     fontWeight: "600",
     color: "#666",
-    marginTop: 25,
-    marginBottom: 5,
+    marginTop: 10,
+    marginBottom: 10,
   },
   item: {
     paddingVertical: 14,
     paddingHorizontal: 4,
     backgroundColor: "#f5f5f5",
     borderRadius: 6,
-    marginBottom: 8,
+    marginBottom: 5,
   },
   itemText: {
     fontSize: 16,
