@@ -38,6 +38,7 @@ export default function LoginScreen({ navigation }) {
 
       await AsyncStorage.setItem("nome", data.data.user.nome);
       await AsyncStorage.setItem("cognome", data.data.user.cognome);
+      await AsyncStorage.setItem("email", data.data.user.email);
       
       const ruolo = data.data.user.ruolo;
       if (ruolo === "admin") {

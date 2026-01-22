@@ -10,8 +10,9 @@ import styles from "../styles/profileStyles";
 export default function ProfileScreen() {
   const navigation = useNavigation();
 
-  const [nome, setNome] = useState("");
-  const [cognome, setCognome] = useState("");
+  function goTo(screen) {
+    navigation.navigate(screen);
+  }
 
   useEffect(() => {
     (async () => {
@@ -28,7 +29,7 @@ export default function ProfileScreen() {
         await logout(idToken);
       }
 
-      await AsyncStorage.multiRemove(["idToken", "role", "refreshToken"]);
+      await AsyncStorage.multiRemove(["idToken", "role", "refreshToken", "nome", "cognome", "email"]);
 
       navigation.replace("Login");
     } catch (error) {
@@ -41,11 +42,13 @@ export default function ProfileScreen() {
   return (
     <View style={styles.container}>
 
+
+
       <ScrollView contentContainerStyle={styles.inner}>
         
         <Text style={styles.sectionTitle}>Account</Text>
 
-        <Pressable style={styles.item} onPress={() => goTo("PersonalInfo")}>
+        <Pressable style={styles.item} onPress={() => goTo("PersonalInformationScreen")}>
           <Text style={styles.itemText}>Informazioni Personali</Text>
         </Pressable>
 

@@ -7,6 +7,7 @@ import FavouriteScreen from "../screens/FavouriteScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import AdminScreen from "../screens/AdminScreen";
 import LoadingScreen from "../screens/LoadingScreen";
+import PersonalInformationScreen from "../screens/PersonalInformationScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -63,6 +64,14 @@ export default function RootNavigator() {
         name="Loading"
         component={LoadingScreen}
         options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="PersonalInformationScreen"
+        component={PersonalInformationScreen}
+        options={{
+          title: "Informazioni Personali",
+          headerBackTitle: "Indietro",
+        }}
       />
     </Stack.Navigator>
   );
