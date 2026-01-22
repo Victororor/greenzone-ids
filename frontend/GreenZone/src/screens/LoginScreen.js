@@ -35,6 +35,9 @@ export default function LoginScreen({ navigation }) {
       await AsyncStorage.setItem("idToken", data.data.idToken);
       await AsyncStorage.setItem("refreshToken", data.data.refreshToken);
       await AsyncStorage.setItem("ruolo", data.data.user.ruolo);
+
+      await AsyncStorage.setItem("nome", data.data.user.nome);
+      await AsyncStorage.setItem("cognome", data.data.user.cognome);
       
       const ruolo = data.data.user.ruolo;
       if (ruolo === "admin") {

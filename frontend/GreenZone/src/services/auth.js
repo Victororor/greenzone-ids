@@ -1,4 +1,5 @@
 import { apiPost } from "./api";
+import { apiGet } from "./api";
 
 export function login(email, password) {
   return apiPost("/api/auth/login", { email, password });

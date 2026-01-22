@@ -11,8 +11,6 @@ export default function App() {
     async function refreshAuthToken() {
 
       const rt = await AsyncStorage.getItem("refreshToken");
-
-      console.log("REFRESH TOKEN:", rt);
       
       if (!rt) return;
 
@@ -22,8 +20,6 @@ export default function App() {
 
           await AsyncStorage.setItem("idToken", res.idToken);
           await AsyncStorage.setItem("refreshToken", res.refreshToken);
-
-          console.log("TOKEN REFRESHED");
 
         } catch (error) {
 

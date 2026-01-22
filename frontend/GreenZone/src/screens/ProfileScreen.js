@@ -1,12 +1,24 @@
 import React from "react";
-import { View, Text, Pressable, Alert, StyleSheet } from "react-native";
+import { View, Text, Pressable, Alert, StyleSheet, ScrollView} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import BottomBar from "../components/BottomBar";
 import { logout } from "../services/auth";
 import { useNavigation } from "@react-navigation/native";
+import { useEffect, useState } from "react";
+import styles from "../styles/profileStyles";
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
+
+  const [nome, setNome] = useState("");
+  const [cognome, setCognome] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      setNome(await AsyncStorage.getItem("nome"));
+      setCognome(await AsyncStorage.getItem("cognome"));
+    })();
+  }, []);
 
   async function handleLogout() {
     try {
@@ -28,23 +40,43 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Schermata Profilo</Text>
-      <Pressable style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={styles.logoutButtonText}>Logout</Text>
-      </Pressable>
+      <View style={styles.header}>
+        <Text style={styles.info}>{nome} {cognome}</Text>
+      </View>
+
+      <ScrollView contentContainerStyle={styles.inner}>
+        
+        <Text style={styles.sectionTitle}>Account</Text>
+
+        <Pressable style={styles.item} onPress={() => goTo("PersonalInfo")}>
+          <Text style={styles.itemText}>Informazioni Personali</Text>
+        </Pressable>
+
+        <Text style={styles.sectionTitle}>App</Text>
+
+        <Pressable style={styles.item} onPress={() => goTo("Notifications")}>
+          <Text style={styles.itemText}>Preferiti</Text>
+        </Pressable>
+
+        <Pressable style={styles.item} onPress={() => goTo("Preferences")}>
+          <Text style={styles.itemText}>Segnala un luogo</Text>
+        </Pressable>
+
+        <Text style={styles.sectionTitle}>Altro</Text>
+
+        <Pressable style={styles.item} onPress={() => goTo("About")}>
+          <Text style={styles.itemText}>Info App</Text>
+        </Pressable>
+
+        <Pressable style={[styles.item, { backgroundColor: "#fbeaea" }]} onPress={handleLogout}>
+          <Text style={[styles.itemText, { color: "#c62828" }]}>Logout</Text>
+        </Pressable>
+
+      </ScrollView>
+
       <BottomBar />
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", alignItems: "center" },
-  text: { fontSize: 24, fontWeight: "bold" },
-  logoutButton: {
-    marginTop: 20,
-    padding: 10,
-    backgroundColor: "#d9534f",
-    borderRadius: 6,
-  },
-  logoutButtonText: { color: "#fff", fontWeight: "bold" },
-});
+
