@@ -1,115 +1,110 @@
-const { db, admin } = require('../config/firebase');
+const { db } = require('../config/firebase');
 const { AppError } = require('../utils/errorHandler');
 
-const COLLECTION_NAME = 'placeSuggestion';
+const COLLECTION = 'placeSuggestion';
+const PLACES_COLLECTION = 'places';
 
-/**
- * Crea una nuova segnalazione luogo (utente)
- */
-const createSuggestion = async (data, submittedBy) => {
-    const suggestion = {
+// UTENTE crea suggerimento
+const createSuggestion = async (data, userId) => {
+    const payload = {
         name: data.name,
-        description: data.description || '',
-        category: data.category,
-        location: {
-            latitude: data.location.latitude,
-            longitude: data.location.longitude,
-            address: data.location.address || '',
-            city: data.location.city || '',
-            country: data.location.country || ''
-        },
-        tags: data.tags || null,
+        description: data.description || null,
+        category: data.category || null,
+        location: data.location || null,
         contact: data.contact || null,
         openingHours: data.openingHours || null,
-        submittedBy,
+        tags: data.tags || null,
+
         status: 'pending',
+        submittedBy: userId,
         reviewedBy: null,
         reviewedAt: null,
-        createdAt: admin.firestore.FieldValue.serverTimestamp(),
-        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+
+        createdAt: new Date(),
+        updatedAt: new Date()
     };
 
-    const docRef = await db.collection(COLLECTION_NAME).add(suggestion);
-
-    return { id: docRef.id, ...suggestion };
+    const doc = await db.collection(COLLECTION).add(payload);
+    return { id: doc.id, ...payload };
 };
 
-/**
- * Prende tutte le segnalazioni pending (solo admin)
- */
+// UTENTE recupera i suoi suggerimenti
+const getSuggestionsByUser = async (userId) => {
+    const snap = await db.collection(COLLECTION)
+        .where('submittedBy', '==', userId)
+        .get();
+
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+};
+
+// ADMIN lista pending
 const getPendingSuggestions = async () => {
-    const snapshot = await db.collection(COLLECTION_NAME)
+    const snap = await db.collection(COLLECTION)
         .where('status', '==', 'pending')
         .get();
 
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
 };
 
-/**
- * Approva una segnalazione e crea un place vero
- */
+// ADMIN approva -> sposta in `places`
 const approveSuggestion = async (id, adminUid) => {
-    const suggestionRef = db.collection(COLLECTION_NAME).doc(id);
-    const snap = await suggestionRef.get();
+    const doc = await db.collection(COLLECTION).doc(id).get();
+    if (!doc.exists) throw new AppError('Suggerimento non trovato', 404);
 
-    if (!snap.exists) throw new AppError('Segnalazione non trovata', 404);
+    const suggestion = doc.data();
+    if (suggestion.status !== 'pending') throw new AppError('Suggerimento già processato', 400);
 
-    const suggestion = snap.data();
-
-    // crea un luogo nella collezione places
-    const place = {
+    // crea place finale
+    const newPlace = {
         name: suggestion.name,
-        description: suggestion.description,
-        category: suggestion.category,
+        description: suggestion.description || '',
         location: suggestion.location,
-        tags: suggestion.tags || [],
         contact: suggestion.contact || {},
-        openingHours: suggestion.openingHours || null,
+        category: suggestion.category,
+
+        tags: suggestion.tags || [],
         rating: 0,
         reviewsCount: 0,
+
         createdBy: suggestion.submittedBy,
-        createdAt: admin.firestore.FieldValue.serverTimestamp(),
-        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-        isVerified: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+
         isActive: true,
+        isVerified: false,
         isDeleted: false,
         deletedAt: null
     };
 
-    await db.collection('places').add(place);
+    const created = await db.collection(PLACES_COLLECTION).add(newPlace);
 
-    // aggiorna la segnalazione come approvata
-    await suggestionRef.update({
+    // aggiorna suggestion
+    await db.collection(COLLECTION).doc(id).update({
         status: 'approved',
         reviewedBy: adminUid,
-        reviewedAt: admin.firestore.FieldValue.serverTimestamp(),
-        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        reviewedAt: new Date(),
+        updatedAt: new Date()
     });
 
-    return { message: 'Segnalazione approvata e luogo creato' };
+    return { id: created.id, ...newPlace };
 };
 
-/**
- * Rifiuta una segnalazione
- */
+// ADMIN rifiuta
 const rejectSuggestion = async (id, adminUid) => {
-    const suggestionRef = db.collection(COLLECTION_NAME).doc(id);
-    const snap = await suggestionRef.get();
+    const doc = await db.collection(COLLECTION).doc(id).get();
+    if (!doc.exists) throw new AppError('Suggerimento non trovato', 404);
 
-    if (!snap.exists) throw new AppError('Segnalazione non trovata', 404);
-
-    await suggestionRef.update({
+    await db.collection(COLLECTION).doc(id).update({
         status: 'rejected',
         reviewedBy: adminUid,
-        reviewedAt: admin.firestore.FieldValue.serverTimestamp(),
-        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        reviewedAt: new Date(),
+        updatedAt: new Date()
     });
-
-    return { message: 'Segnalazione rifiutata' };
 };
 
 module.exports = {
     createSuggestion,
+    getSuggestionsByUser,
     getPendingSuggestions,
     approveSuggestion,
     rejectSuggestion
