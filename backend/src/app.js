@@ -93,7 +93,7 @@ app.use('/api/places', placeRoutes);
 app.use('/api/favorites', favoriteRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/admin', adminRoutes);
-app.use('/api/place-suggestions', placeSuggestionRoutes);
+app.use('/api/placeSuggestion', placeSuggestionRoutes);
 
 // 404 handler
 app.use(notFoundHandler);
