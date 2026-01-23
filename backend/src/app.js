@@ -20,6 +20,8 @@ const placeRoutes = require('./routes/place.routes');
 const reportRoutes = require('./routes/report.routes');
 const adminRoutes = require('./routes/admin.routes');
 const favoriteRoutes = require('./routes/favorite.routes');
+const placeSuggestionRoutes = require('./routes/placeSuggestion.routes');
+
 
 const app = express();
 
@@ -73,7 +75,8 @@ app.get('/', (req, res) => {
             places: '/api/places',
             favorites: '/api/favorites',
             reports: '/api/reports',
-            admin: '/api/admin'
+            admin: '/api/admin',
+            placeSuggestions: '/api/place-suggestions'
         }
     });
 });
@@ -90,6 +93,7 @@ app.use('/api/places', placeRoutes);
 app.use('/api/favorites', favoriteRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/place-suggestions', placeSuggestionRoutes);
 
 // 404 handler
 app.use(notFoundHandler);
