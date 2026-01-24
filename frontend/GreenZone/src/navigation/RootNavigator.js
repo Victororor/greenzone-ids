@@ -57,7 +57,7 @@ export default function RootNavigator({ ruolo, setRuolo }) {
         name="Favourite"
         component={FavouriteScreen}
         options={{
-          headerShown: true,
+          headerShown: false,
           headerBackVisible: false,
           headerLeft: () => null,
         }}
@@ -66,7 +66,7 @@ export default function RootNavigator({ ruolo, setRuolo }) {
       <Stack.Screen
         name="Profile"
         options={{
-          headerShown: true,
+          headerShown: false,
           headerBackVisible: false,
           headerLeft: () => null,
         }}

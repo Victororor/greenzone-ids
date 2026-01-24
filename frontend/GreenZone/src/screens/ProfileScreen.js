@@ -53,13 +53,13 @@ export default function ProfileScreen({ setRuolo }) {
           <Text style={styles.itemText}>Informazioni Personali</Text>
         </Pressable>
 
-        <Text style={styles.sectionTitle}>App</Text>
+        <Text style={styles.sectionTitle1}>App</Text>
 
         <Pressable style={styles.item} onPress={() => goTo("Sending")}>
           <Text style={styles.itemText}>Segnala un luogo</Text>
         </Pressable>
 
-        <Text style={styles.sectionTitle}>Altro</Text>
+        <Text style={styles.sectionTitle1}>Altro</Text>
 
         <Pressable style={styles.item} onPress={() => goTo("About")}>
           <Text style={styles.itemText}>Info App</Text>

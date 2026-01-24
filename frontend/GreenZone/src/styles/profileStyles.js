@@ -3,36 +3,56 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#FFFFFF",
   },
+
   header: {
     paddingTop: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
   },
+
   info: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "600",
+    color: "#111827",
   },
+
   inner: {
     paddingTop: 0,
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
     paddingBottom: 100,
   },
+
   sectionTitle: {
-    fontSize: 30,
-    fontWeight: "600",
-    color: "#666",
-    marginTop: 10,
-    marginBottom: 10,
+    fontSize: 26,
+    fontWeight: "700",
+    color: "#14948B",
+    marginTop: 50,
+    marginBottom: 12,
   },
+
+  sectionTitle1: {
+    fontSize: 26,
+    fontWeight: "700",
+    color: "#14948B",
+    marginTop: 10,
+    marginBottom: 12,
+  },
+
   item: {
     paddingVertical: 14,
-    paddingHorizontal: 4,
-    backgroundColor: "#f5f5f5",
-    borderRadius: 6,
-    marginBottom: 5,
+    paddingHorizontal: 18,
+    backgroundColor: "#F3F4F6",
+    borderRadius: 12,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
   },
+
   itemText: {
     fontSize: 16,
-    color: "#222",
+    fontWeight: "500",
+    color: "#111827",
+    letterSpacing: 0.2,
   },
 });
