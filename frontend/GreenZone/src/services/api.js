@@ -1,4 +1,4 @@
-export const apiBaseUrl = "http://192.168.3.122:3000";
+export const apiBaseUrl = "http://192.168.3.247:3000";
 
 export async function apiPost(endpoint, body = {}, headers = {}) {
   const url = `${apiBaseUrl}${endpoint}`;
