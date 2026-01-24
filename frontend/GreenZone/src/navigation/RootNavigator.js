@@ -9,6 +9,7 @@ import AdminScreen from "../screens/AdminScreen";
 import LoadingScreen from "../screens/LoadingScreen";
 import PersonalInformationScreen from "../screens/PersonalInformationScreen";
 import InfoAppScreen from "../screens/InfoAppScreen";
+import SendingPlaceScreen from "../screens/SendingPlaceScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -82,7 +83,14 @@ export default function RootNavigator() {
           headerBackTitle: "Indietro",
         }}
       />
-
+      <Stack.Screen
+        name="Sending"
+        component={SendingPlaceScreen}
+        options={{
+          title: "Segnalazione",
+          headerBackTitle: "Indietro",
+        }}
+      />
     </Stack.Navigator>
   );
 }
