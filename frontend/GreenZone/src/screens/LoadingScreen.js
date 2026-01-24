@@ -12,7 +12,7 @@ export default function LoadingScreen() {
       const role = await AsyncStorage.getItem("ruolo");
 
       if (token && role) {
-        if (role === "admin") navigation.replace("Admin");
+        if (role === "admin") navigation.replace("admin");
         else navigation.replace("Map");
       } else {
         navigation.replace("Login");

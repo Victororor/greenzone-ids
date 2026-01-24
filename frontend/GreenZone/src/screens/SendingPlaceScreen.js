@@ -64,6 +64,10 @@ export default function SendingPlaceScreen() {
     })();
   }, []);
 
+  async function navigate(screen) {
+    navigation.navigate(screen);
+  }
+
   async function reloadPosition() {
     try {
       setLoadingLocation(true);
@@ -124,6 +128,9 @@ export default function SendingPlaceScreen() {
       setName("");
       setCategory(null);
       setDescription("");
+      setCoords(null);
+      reloadPosition();
+      navigate("Map");
     } catch (err) {
       Alert.alert("Errore", err.message || "Qualcosa è andato storto.");
     }

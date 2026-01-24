@@ -15,11 +15,12 @@ import { login } from "../services/auth";
 import styles from "../styles/globalStyles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen({ navigation, setRuolo }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [ruolo, setRole] = useState(null);
 
   async function handleLogin() {
     if (!email.trim() || !password) {
@@ -34,24 +35,19 @@ export default function LoginScreen({ navigation }) {
 
       await AsyncStorage.setItem("idToken", data.data.idToken);
       await AsyncStorage.setItem("refreshToken", data.data.refreshToken);
-      await AsyncStorage.setItem("ruolo", data.data.user.ruolo);
+      const ruolo = data.data.user.ruolo;
+
+      await AsyncStorage.setItem("ruolo", ruolo);
+      setRuolo(ruolo);
 
       await AsyncStorage.setItem("nome", data.data.user.nome);
       await AsyncStorage.setItem("cognome", data.data.user.cognome);
       await AsyncStorage.setItem("email", data.data.user.email);
-      
-      const ruolo = data.data.user.ruolo;
-      if (ruolo === "admin") {
-        navigation.replace("Admin");
-      } else {
-        navigation.replace("Map");
-      }
-
     } catch (error) {
       console.error("LOGIN ERROR:", error);
       Alert.alert(
         "Errore di accesso",
-        error.response?.data?.message || "Si è verificato un errore. Riprova."
+        error.response?.data?.message || "Si è verificato un errore. Riprova.",
       );
     } finally {
       setLoading(false);

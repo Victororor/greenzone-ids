@@ -29,7 +29,7 @@ export default function ProfileScreen() {
         await logout(idToken);
       }
 
-      await AsyncStorage.multiRemove(["idToken", "role", "refreshToken", "nome", "cognome", "email"]);
+      await AsyncStorage.multiRemove(["idToken", "ruolo", "refreshToken", "nome", "cognome", "email"]);
 
       navigation.replace("Login");
     } catch (error) {

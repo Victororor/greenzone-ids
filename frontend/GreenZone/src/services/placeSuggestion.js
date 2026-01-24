@@ -1,6 +1,13 @@
 import { apiGet, apiPost } from "./api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+export async function createPlaceSuggestion(suggestionData) {
+  const idToken = await AsyncStorage.getItem("idToken");
+  return apiPost("/api/placeSuggestion", suggestionData, {
+    Authorization: `Bearer ${idToken}`,
+  });
+}
+
 export async function getSuggestionsPending() {
   const idToken = await AsyncStorage.getItem("idToken");
   return apiGet("/api/placeSuggestion", {

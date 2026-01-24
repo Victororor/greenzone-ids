@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, ActivityIndicator, Pressable, Alert, StyleSheet } from "react-native";
 import { getSuggestionsPending, approveSuggestion, rejectSuggestion } from "../services/placeSuggestion";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { logout } from "../services/auth";
+import { useNavigation } from "@react-navigation/native";
+
 
 export default function AdminSuggestionsScreen() {
+  const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const [suggestions, setSuggestions] = useState([]);
 
@@ -43,7 +48,28 @@ export default function AdminSuggestionsScreen() {
 
   useEffect(() => {
     loadSuggestions();
+
+
   }, []);
+
+  async function handleLogout() {
+    try {
+      const idToken = await AsyncStorage.getItem("idToken");
+
+      if (idToken) {
+        await logout(idToken);
+      }
+
+      await AsyncStorage.multiRemove(["idToken", "ruolo", "refreshToken", "nome", "cognome", "email"]);
+
+      navigation.replace("Login");
+    } catch (error) {
+      console.error("LOGOUT ERROR:", error);
+      Alert.alert("Errore di logout", error?.message || "Riprova.");
+      navigation.replace("Login");
+    }
+  }
+
 
   const renderItem = ({ item }) => (
     <View style={styles.card}>
@@ -83,6 +109,13 @@ export default function AdminSuggestionsScreen() {
           contentContainerStyle={{ paddingBottom: 40 }}
         />
       )}
+
+      <Pressable style={styles.logoutButton} onPress={handleLogout}>
+        <Text style={styles.logoutText}>Logout</Text>
+      </Pressable>
+
+
+
     </View>
   );
 }
@@ -114,4 +147,21 @@ const styles = StyleSheet.create({
   approve: { backgroundColor: "#10b981" },
   reject: { backgroundColor: "#ef4444" },
   btnText: { color: "#fff", fontWeight: "bold" },
+
+  logoutButton: {
+    marginTop: "auto",
+    width: "100%",
+    height: 52,
+    marginBottom: 20,
+    borderRadius: 30,
+    backgroundColor: "#14948B",
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+  },
+  logoutText: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontWeight: "600",
+  },
 });
