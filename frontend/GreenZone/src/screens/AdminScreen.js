@@ -6,7 +6,7 @@ import { logout } from "../services/auth";
 import { useNavigation } from "@react-navigation/native";
 
 
-export default function AdminSuggestionsScreen() {
+export default function AdminSuggestionsScreen({ setRuolo }) {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const [suggestions, setSuggestions] = useState([]);
@@ -61,6 +61,7 @@ export default function AdminSuggestionsScreen() {
       }
 
       await AsyncStorage.multiRemove(["idToken", "ruolo", "refreshToken", "nome", "cognome", "email"]);
+      setRuolo(null);
 
       navigation.replace("Login");
     } catch (error) {

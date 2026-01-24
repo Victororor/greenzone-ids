@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useState } from "react";
+import AsyncStorage  from "@react-native-async-storage/async-storage";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
 import MapScreen from "../screens/MapScreen";
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
@@ -10,16 +11,29 @@ import LoadingScreen from "../screens/LoadingScreen";
 import PersonalInformationScreen from "../screens/PersonalInformationScreen";
 import InfoAppScreen from "../screens/InfoAppScreen";
 import SendingPlaceScreen from "../screens/SendingPlaceScreen";
+import { useNavigation } from "@react-navigation/native";
 
 const Stack = createNativeStackNavigator();
 
-export default function RootNavigator({ setRuolo }) {
+export default function RootNavigator({ ruolo, setRuolo }) {
+  const [ready, setReady] = React.useState(false);
+  const [logged, setLogged] = React.useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const token = await AsyncStorage.getItem("idToken");
+      const role = await AsyncStorage.getItem("ruolo");
+
+      if (token && role === "user") setLogged(true);
+      setReady(true);
+    })();
+  }, []);
+
+  if (!ready) return null;
+
   return (
-    <Stack.Navigator initialRouteName="Loading">
-      <Stack.Screen
-        name="Login"
-        options={{ headerShown: false }}
-      >
+    <Stack.Navigator initialRouteName={logged ? "Map" : "Login"}>
+      <Stack.Screen name="Login" options={{ headerShown: false }}>
         {(props) => <LoginScreen {...props} setRuolo={setRuolo} />}
       </Stack.Screen>
 
@@ -51,19 +65,21 @@ export default function RootNavigator({ setRuolo }) {
 
       <Stack.Screen
         name="Profile"
-        component={ProfileScreen}
         options={{
           headerShown: true,
           headerBackVisible: false,
           headerLeft: () => null,
         }}
-      />
+      >
+        {(props) => <ProfileScreen {...props} setRuolo={setRuolo} />}
+      </Stack.Screen>
 
       <Stack.Screen
         name="Loading"
-        component={LoadingScreen}
-        options={{ headerShown: false }}
-      />
+        options={{ headerShown: false, }}
+        >
+        {(props) => <LoadingScreen {...props} setRuolo={setRuolo} />}
+      </Stack.Screen>
 
       <Stack.Screen
         name="PersonalInformationScreen"
@@ -77,19 +93,13 @@ export default function RootNavigator({ setRuolo }) {
       <Stack.Screen
         name="About"
         component={InfoAppScreen}
-        options={{
-          title: "Info App",
-          headerBackTitle: "Indietro",
-        }}
+        options={{ title: "Info App", headerBackTitle: "Indietro" }}
       />
 
       <Stack.Screen
         name="Sending"
         component={SendingPlaceScreen}
-        options={{
-          title: "Segnalazione",
-          headerBackTitle: "Indietro",
-        }}
+        options={{ title: "Segnalazione", headerBackTitle: "Indietro" }}
       />
     </Stack.Navigator>
   );

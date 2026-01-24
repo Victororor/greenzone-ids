@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import styles from "../styles/profileStyles";
 
-export default function ProfileScreen() {
+export default function ProfileScreen({ setRuolo }) {
   const navigation = useNavigation();
 
   function goTo(screen) {
@@ -30,6 +30,7 @@ export default function ProfileScreen() {
       }
 
       await AsyncStorage.multiRemove(["idToken", "ruolo", "refreshToken", "nome", "cognome", "email"]);
+      setRuolo(null);
 
       navigation.replace("Login");
     } catch (error) {

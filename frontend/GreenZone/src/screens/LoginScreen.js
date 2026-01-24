@@ -35,14 +35,14 @@ export default function LoginScreen({ navigation, setRuolo }) {
 
       await AsyncStorage.setItem("idToken", data.data.idToken);
       await AsyncStorage.setItem("refreshToken", data.data.refreshToken);
-      const ruolo = data.data.user.ruolo;
-
-      await AsyncStorage.setItem("ruolo", ruolo);
-      setRuolo(ruolo);
-
+      await AsyncStorage.setItem("ruolo", data.data.user.ruolo);
       await AsyncStorage.setItem("nome", data.data.user.nome);
       await AsyncStorage.setItem("cognome", data.data.user.cognome);
       await AsyncStorage.setItem("email", data.data.user.email);
+      
+      setRuolo(data.data.user.ruolo);
+
+
     } catch (error) {
       console.error("LOGIN ERROR:", error);
       Alert.alert(

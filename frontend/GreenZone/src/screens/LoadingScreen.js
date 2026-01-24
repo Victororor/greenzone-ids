@@ -3,7 +3,7 @@ import { ActivityIndicator, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 
-export default function LoadingScreen() {
+export default function LoadingScreen({ setRuolo }) {
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -12,10 +12,9 @@ export default function LoadingScreen() {
       const role = await AsyncStorage.getItem("ruolo");
 
       if (token && role) {
-        if (role === "admin") navigation.replace("admin");
-        else navigation.replace("Map");
+        setRuolo(role);
       } else {
-        navigation.replace("Login");
+        setRuolo(null);
       }
     })();
   }, []);

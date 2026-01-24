@@ -10,7 +10,7 @@ export default function App() {
   const [ruolo, setRuolo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // CARICA RUOLO INIZIALE
+  // Carica ruolo all'avvio
   useEffect(() => {
     async function init() {
       const storedRole = await AsyncStorage.getItem("ruolo");
@@ -20,7 +20,7 @@ export default function App() {
     init();
   }, []);
 
-  // REFRESH TOKEN
+  // Refresh token
   useEffect(() => {
     async function refreshAuthToken() {
       const rt = await AsyncStorage.getItem("refreshToken");
@@ -33,8 +33,6 @@ export default function App() {
 
             await AsyncStorage.setItem("idToken", res.idToken);
             await AsyncStorage.setItem("refreshToken", res.refreshToken);
-
-            console.log("Token Refresh OK");
           } catch (error) {
             console.error("TOKEN REFRESH ERROR:", error);
             clearInterval(interval);
@@ -49,15 +47,19 @@ export default function App() {
     refreshAuthToken();
   }, []);
 
-  if (isLoading) return null;
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#14948B" />
+      </View>
+    );
+  }
 
   return (
-    <NavigationContainer>
-      {ruolo === "admin" ? (
-        <AdminNavigator />
-      ) : (
-        <RootNavigator setRuolo={setRuolo} />
-      )}
+    <NavigationContainer key={ruolo}>
+      {ruolo === null && <RootNavigator setRuolo={setRuolo} />}
+      {ruolo === "user" && <RootNavigator setRuolo={setRuolo} />}
+      {ruolo === "admin" && <AdminNavigator setRuolo={setRuolo} />}
     </NavigationContainer>
   );
 }
