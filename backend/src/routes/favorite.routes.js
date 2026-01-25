@@ -7,7 +7,7 @@ const { verifyToken } = require('../middlewares/auth.middleware');
 router.get('/me', verifyToken, favoriteController.getMyFavorites);
 
 // POST /api/favorites -> aggiungi un preferito
-router.post('/placeId', verifyToken, favoriteController.addFavorite);
+router.post('/:placeId', verifyToken, favoriteController.addFavorite);
 
 // DELETE /api/favorites/:placeId -> rimuovi preferito
 router.delete('/:placeId', verifyToken, favoriteController.removeFavorite);

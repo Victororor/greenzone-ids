@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import {
   View,
   StyleSheet,
@@ -7,15 +7,19 @@ import {
   Text,
   Pressable,
   Modal,
+  Platform,
+  StatusBar
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import BottomBar from "../components/BottomBar";
-import { apiGet } from "../services/api";
+import { apiGet, apiPost } from "../services/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import styles from "../styles/MapStyles";
 
 const TAB_BAR_HEIGHT = 104;
+
 
 const CAT_LABELS = {
   shop: "Negozio Bio",
@@ -40,14 +44,16 @@ const FILTERS = [
 ];
 
 export default function HomeScreen() {
-  const [idToken, setIdToken] = useState(null);
-
   const [location, setLocation] = useState(null);
   const [mapReady, setMapReady] = useState(false);
+
   const [places, setPlaces] = useState([]);
+  const [favorites, setFavorites] = useState([]);
+
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [showFilter, setShowFilter] = useState(false);
-  const [favorites, setFavorites] = useState([]);
+
+  const [selectedPlace, setSelectedPlace] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -70,30 +76,53 @@ export default function HomeScreen() {
           Authorization: `Bearer ${idToken}`,
         });
         setFavorites(favRes.data.favorites || []);
-
-        console.log("PLACES:", res.data.places);
-        console.log("FAVORITES:", favRes.data.favorites);
+        
       } catch (e) {
         console.log("ERR CARICAMENTO:", e);
       }
     })();
   }, []);
 
-  let filteredPlaces = places;
+  // ====== FAVORITE IDS ======
+  const favoriteIds = useMemo(() => {
+    // Usiamo String() per sicurezza, anche se dal tuo JSON sembrano già stringhe
+    return favorites.map((f) => String(f.id));
+  }, [favorites]);
 
-  if (selectedFilter && selectedFilter !== "favorites") {
-    filteredPlaces = places.filter((p) => p.category === selectedFilter);
-  }
+  // ====== FILTERED PLACES ======
+  const filteredPlaces = useMemo(() => {
+    if (selectedFilter === "favorites") {
+      return places.filter((p) => favoriteIds.includes(String(p.id)));
+    }
+    if (selectedFilter) {
+      return places.filter((p) => p.category === selectedFilter);
+    }
+    return places;
+  }, [places, favoriteIds, selectedFilter]);
 
-  if (selectedFilter === "favorites") {
-    filteredPlaces = favorites;
-  }
-
+  // ====== READY STATE ======
   const isReady = location && mapReady;
+
+  // ====== CHECK SE GIÀ NEI PREFERITI (Per la card in basso) ======
+  const alreadyFav = selectedPlace && favoriteIds.includes(String(selectedPlace.id));
+
+  async function handleAddFavorite() {
+    try {
+      const idToken = await AsyncStorage.getItem("idToken");
+
+      await apiPost(`/api/favorites/${selectedPlace.id}`, {}, {
+        Authorization: `Bearer ${idToken}`
+      });
+
+      setFavorites(prev => [...prev, { id: selectedPlace.id }]);
+    } catch (error) {
+      console.log("Errore aggiunta preferito:", error);
+      Alert.alert("Errore", "Impossibile aggiungere ai preferiti al momento.");
+    }
+  }
 
   return (
     <View style={styles.container}>
-      {/* FILTER BUTTON */}
       <Pressable
         style={styles.filterButton}
         onPress={() => setShowFilter(true)}
@@ -101,13 +130,7 @@ export default function HomeScreen() {
         <Ionicons name="filter" size={22} color="#14948B" />
       </Pressable>
 
-      {/* POPUP SMALL */}
-      <Modal
-        visible={showFilter}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setShowFilter(false)}
-      >
+      <Modal visible={showFilter} transparent animationType="fade">
         <Pressable style={styles.overlay} onPress={() => setShowFilter(false)}>
           <View style={styles.filterBox}>
             {FILTERS.map((f) => (
@@ -136,120 +159,76 @@ export default function HomeScreen() {
         </Pressable>
       </Modal>
 
-      {/* MAP */}
       {location && (
         <MapView
           style={[
             StyleSheet.absoluteFillObject,
             { bottom: TAB_BAR_HEIGHT, opacity: isReady ? 1 : 0 },
           ]}
-          initialRegion={{
+          region={{
             latitude: location.latitude,
             longitude: location.longitude,
             latitudeDelta: 0.02,
             longitudeDelta: 0.02,
           }}
           showsUserLocation
+          onPress={() => setSelectedPlace(null)}
           onMapReady={() => setMapReady(true)}
         >
-          {filteredPlaces.map((place) => (
-            <Marker
-              key={place.id}
-              coordinate={{
-                latitude: place.location.latitude,
-                longitude: place.location.longitude,
-              }}
-              title={place.name}
-              description={CAT_LABELS[place.category] || place.category}
-              pinColor="#14948B" // stile greenZone
-            />
-          ))}
+          {filteredPlaces.map((place) => {
+            // CORREZIONE CRUCIALE: Il calcolo deve avvenire QUI, per ogni singolo posto
+            const isFav = favoriteIds.includes(String(place.id));
+            
+            return (
+              <Marker
+                // Aggiungiamo isFav alla key per forzare il re-render se cambia stato
+                key={`${place.id}-${isFav}`} 
+                coordinate={{
+                  latitude: place.location.latitude,
+                  longitude: place.location.longitude,
+                }}
+                title={place.name}
+                // Ora isFav è specifico per QUESTO marker
+                pinColor={isFav ? "#FFD700" : "#14948B"} 
+                onPress={() => setSelectedPlace(place)}
+              />
+            );
+          })}
         </MapView>
       )}
 
-      {/* LOADING finché non è pronta */}
+      {selectedPlace && (
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>{selectedPlace.name}</Text>
+          <Text style={styles.cardSub}>
+            {CAT_LABELS[selectedPlace.category]} • {selectedPlace.location.city}
+          </Text>
+
+          {!alreadyFav ? (
+            <Pressable
+              style={styles.favoriteButton}
+              onPress={handleAddFavorite}
+            >
+              <Text style={styles.favoriteText}>Aggiungi ai preferiti</Text>
+            </Pressable>
+          ) : (
+            <Text style={styles.alreadyFav}>Già nei preferiti</Text>
+          )}
+
+          <Pressable onPress={() => setSelectedPlace(null)}>
+            <Text style={styles.closeText}>Chiudi</Text>
+          </Pressable>
+        </View>
+      )}
+
       {!isReady && (
         <View style={styles.loader}>
-          <ActivityIndicator
-            size="large"
-            color="#14948B"
-            style={{ transform: [{ scale: 2 }] }}
-          />
-
+          <ActivityIndicator size="large" color="#14948B" />
           <Text style={styles.loaderText}>Caricamento...</Text>
         </View>
       )}
 
-      {/* NAVBAR APP */}
       <BottomBar />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1 },
-
-  filterButton: {
-    position: "absolute",
-    top: 10,
-    left: 10,
-    zIndex: 20,
-    backgroundColor: "#FFFFFF",
-    padding: 10,
-    borderRadius: 10,
-    elevation: 4,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-  },
-
-  overlay: {
-    flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
-  },
-
-  filterBox: {
-    marginTop: 90,
-    marginLeft: 20,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 12,
-    padding: 8,
-    width: 180,
-    elevation: 6,
-    shadowColor: "#000",
-    shadowOpacity: 0.15,
-  },
-
-  filterItem: {
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    borderRadius: 8,
-  },
-
-  filterItemActive: {
-    backgroundColor: "#14948B20",
-  },
-
-  filterLabel: {
-    fontSize: 15,
-    color: "#333",
-  },
-
-  filterLabelActive: {
-    fontWeight: "700",
-    color: "#14948B",
-  },
-
-  loader: {
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#FFFFFF",
-  },
-  loaderText: {
-    marginTop: 12,
-    fontSize: 16,
-    color: "#0b0e14ff",
-  },
-});
