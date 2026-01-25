@@ -49,3 +49,24 @@ export async function apiGet(endpoint, headers = {}) {
   return result;
 }
 
+export async function apiDelete(endpoint, headers = {}) {
+  const url = `${apiBaseUrl}${endpoint}`;
+  const response = await fetch(url, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json", ...headers },
+  });
+  const text = await response.text();
+  let result = null;
+  try {
+    result = text ? JSON.parse(text) : null;
+  }
+  catch {
+    result = { raw: text };
+  }
+  if (!response.ok) {
+    throw new Error(result?.message || "API DELETE failed");
+  }
+  return result;
+}
+
+

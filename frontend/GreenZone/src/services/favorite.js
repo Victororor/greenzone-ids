@@ -1,4 +1,4 @@
-import { apiGet, apiPost } from "./api";
+import { apiGet, apiPost, apiDelete } from "./api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 async function addToFavorite(placeId) {

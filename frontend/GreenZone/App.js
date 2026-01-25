@@ -5,6 +5,7 @@ import AdminNavigator from "./src/navigation/AdminNavigator";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { refresh } from "./src/services/auth";
 import { View, ActivityIndicator } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function App() {
   const [ruolo, setRuolo] = useState(null);
@@ -26,20 +27,17 @@ export default function App() {
       const rt = await AsyncStorage.getItem("refreshToken");
       if (!rt) return;
 
-      const interval = setInterval(
-        async () => {
-          try {
-            const res = await refresh(rt);
+      const interval = setInterval(async () => {
+        try {
+          const res = await refresh(rt);
 
-            await AsyncStorage.setItem("idToken", res.idToken);
-            await AsyncStorage.setItem("refreshToken", res.refreshToken);
-          } catch (error) {
-            console.error("TOKEN REFRESH ERROR:", error);
-            clearInterval(interval);
-          }
-        },
-        55 * 60 * 1000,
-      );
+          await AsyncStorage.setItem("idToken", res.idToken);
+          await AsyncStorage.setItem("refreshToken", res.refreshToken);
+        } catch (error) {
+          console.error("TOKEN REFRESH ERROR:", error);
+          clearInterval(interval);
+        }
+      }, 55 * 60 * 1000);
 
       return () => clearInterval(interval);
     }
@@ -56,10 +54,12 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer key={ruolo}>
-      {ruolo === null && <RootNavigator setRuolo={setRuolo} />}
-      {ruolo === "user" && <RootNavigator setRuolo={setRuolo} />}
-      {ruolo === "admin" && <AdminNavigator setRuolo={setRuolo} />}
-    </NavigationContainer>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <NavigationContainer key={ruolo}>
+        {ruolo === null && <RootNavigator setRuolo={setRuolo} />}
+        {ruolo === "user" && <RootNavigator setRuolo={setRuolo} />}
+        {ruolo === "admin" && <AdminNavigator setRuolo={setRuolo} />}
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 }
