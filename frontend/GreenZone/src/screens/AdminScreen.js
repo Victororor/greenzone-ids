@@ -27,7 +27,7 @@ export default function AdminSuggestionsScreen({ setRuolo }) {
   async function handleApprove(id) {
     try {
       await approveSuggestion(id); // POST /approve
-      Alert.alert("Successo", "Luogo approvato ed inserito 👍");
+      Alert.alert("Successo", "Luogo approvato ed inserito nella mappa");
       loadSuggestions();
     } catch (err) {
       console.log("APPROVE ERROR:", err);

@@ -3,12 +3,12 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#f0f0f0", // Uniformato allo sfondo delle altre schermate
   },
 
   header: {
     paddingTop: 10,
-    paddingHorizontal: 24,
+    paddingHorizontal: 20,
   },
 
   info: {
@@ -18,41 +18,42 @@ export default StyleSheet.create({
   },
 
   inner: {
-    paddingTop: 0,
-    paddingHorizontal: 24,
+    paddingTop: 10,
+    paddingHorizontal: 20, // Margine laterale standard (come la lista preferiti)
     paddingBottom: 100,
   },
 
   sectionTitle: {
-    fontSize: 26,
+    fontSize: 22, // Leggermente ridotto per eleganza (era 26)
     fontWeight: "700",
-    color: "#14948B",
-    marginTop: 50,
-    marginBottom: 12,
+    color: "#14948B", // Verde brand
+    marginTop: 40,
+    marginBottom: 10,
+    marginLeft: 4, // Allineamento ottico con le card
   },
 
   sectionTitle1: {
-    fontSize: 26,
+    fontSize: 22,
     fontWeight: "700",
     color: "#14948B",
-    marginTop: 10,
-    marginBottom: 12,
+    marginTop: 24, // Spazio separatore tra le sezioni
+    marginBottom: 10,
+    marginLeft: 4,
   },
 
   item: {
-    paddingVertical: 14,
+    backgroundColor: "#FFFFFF", // Card bianca
+    paddingVertical: 16,        // Più spazio per il dito
     paddingHorizontal: 18,
-    backgroundColor: "#F3F4F6",
-    borderRadius: 12,
-    marginBottom: 10,
-    borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderRadius: 12,           // Arrotondamento coerente con FavouriteScreen
+    marginBottom: 12,
+    
   },
 
   itemText: {
     fontSize: 16,
-    fontWeight: "500",
-    color: "#111827",
+    fontWeight: "600", // Testo un po' più marcato per leggibilità
+    color: "#333333",
     letterSpacing: 0.2,
   },
 });
