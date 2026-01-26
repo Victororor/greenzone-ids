@@ -35,7 +35,7 @@ export default StyleSheet.create({
 
   card: {
     position: "absolute",
-    bottom: TAB_BAR_HEIGHT + 10,
+    bottom: TAB_BAR_HEIGHT + 60,
     left: 10,
     right: 10,
     backgroundColor: "#fff",
@@ -56,7 +56,7 @@ export default StyleSheet.create({
   },
 
   favoriteText: { color: "#fff", fontWeight: "600" },
-  alreadyFav: { color: "#14948B", marginTop: 12, fontWeight: "600" },
+  alreadyFav: { color: "#14948B", marginTop: 12, fontWeight: "600", textAlign: "center" },
   closeText: {
     textAlign: "center",
     marginTop: 10,
