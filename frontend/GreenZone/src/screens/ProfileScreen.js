@@ -24,21 +24,23 @@ export default function ProfileScreen({ setRuolo }) {
   async function handleLogout() {
     try {
       const idToken = await AsyncStorage.getItem("idToken");
+      if (idToken) await logout(idToken);
 
-      if (idToken) {
-        await logout(idToken);
-      }
-
+      // Rimuovi tutto
       await AsyncStorage.multiRemove(["idToken", "ruolo", "refreshToken", "nome", "cognome", "email"]);
-      setRuolo(null);
-
-      navigation.replace("Login");
+      
+      // QUESTO E' IMPORTANTE:
+      // Settando null, App.js rileverà il cambio e mostrerà AuthNavigator automaticamente
+      setRuolo(null); 
+      
+      // Non serve navigation.replace("Login"), lo fa React da solo grazie allo stato
     } catch (error) {
       console.error("LOGOUT ERROR:", error);
-      Alert.alert("Errore di logout", error?.message || "Riprova.");
-      navigation.replace("Login");
+      // Anche in caso di errore, forza il logout locale
+      await AsyncStorage.clear();
+      setRuolo(null);
     }
-  }
+}
 
   return (
     <View style={styles.container}>

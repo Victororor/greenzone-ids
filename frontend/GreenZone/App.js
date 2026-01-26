@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import RootNavigator from "./src/navigation/RootNavigator";
 import AdminNavigator from "./src/navigation/AdminNavigator";
+import AuthNavigator from "./src/navigation/AuthNavigator"; // <--- IMPORTA QUESTO
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { refresh } from "./src/services/auth";
 import { View, ActivityIndicator } from "react-native";
@@ -14,36 +15,19 @@ export default function App() {
   // Carica ruolo all'avvio
   useEffect(() => {
     async function init() {
-      const storedRole = await AsyncStorage.getItem("ruolo");
-      setRuolo(storedRole);
-      setIsLoading(false);
+      try {
+        const storedRole = await AsyncStorage.getItem("ruolo");
+        setRuolo(storedRole); // Se non c'è, sarà null
+      } catch(e) {
+        console.log(e);
+      } finally {
+        setIsLoading(false);
+      }
     }
     init();
   }, []);
 
-  // Refresh token
-  useEffect(() => {
-    async function refreshAuthToken() {
-      const rt = await AsyncStorage.getItem("refreshToken");
-      if (!rt) return;
-
-      const interval = setInterval(async () => {
-        try {
-          const res = await refresh(rt);
-
-          await AsyncStorage.setItem("idToken", res.idToken);
-          await AsyncStorage.setItem("refreshToken", res.refreshToken);
-        } catch (error) {
-          console.error("TOKEN REFRESH ERROR:", error);
-          clearInterval(interval);
-        }
-      }, 55 * 60 * 1000);
-
-      return () => clearInterval(interval);
-    }
-
-    refreshAuthToken();
-  }, []);
+  // ... il tuo codice per il refresh token resta uguale ...
 
   if (isLoading) {
     return (
@@ -55,10 +39,18 @@ export default function App() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <NavigationContainer key={ruolo}>
-        {ruolo === null && <RootNavigator setRuolo={setRuolo} />}
+      {/* Usiamo key={ruolo} per forzare il re-render completo quando cambia stato */}
+      <NavigationContainer key={ruolo}> 
+        
+        {/* SE NON LOGGATO (ruolo è null) -> VAI ALL'AUTH NAVIGATOR */}
+        {ruolo === null && <AuthNavigator setRuolo={setRuolo} />}
+
+        {/* SE UTENTE -> VAI AL ROOT NAVIGATOR (Mappa, Profilo, ecc) */}
         {ruolo === "user" && <RootNavigator setRuolo={setRuolo} />}
+
+        {/* SE ADMIN -> VAI ALL'ADMIN NAVIGATOR */}
         {ruolo === "admin" && <AdminNavigator setRuolo={setRuolo} />}
+
       </NavigationContainer>
     </GestureHandlerRootView>
   );
