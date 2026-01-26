@@ -52,7 +52,7 @@ Attualmente l'applicazione supporta le seguenti funzionalità verificate e funzi
 La logica dell'app è suddivisa per mantenere il codice pulito e modulare:
 
 ```text
-frontend/src/
+frontend/GreenZone/src/
 ├── components/    # Componenti riutilizzabili nell'interfaccia
 ├── navigation/    # Gestione dei navigatori (Stack e Tab) e protezione rotte
 ├── screens/       # Schermate visive (es. AdminUsersScreen, MapScreen)
@@ -77,13 +77,14 @@ backend/src/
 * Firebase Account (per backend e autenticazione)
 
 ### Istruzioni
-
+```bash
 ## Frontend
 cd greenzone-ids/frontend/GreenZone
 npm install
 npx expo start
-
+---
 ## Backend
+```bash
 cd greenzone-ids/backend
 npm install
 npm start
