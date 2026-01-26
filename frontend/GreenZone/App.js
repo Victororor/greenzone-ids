@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import RootNavigator from "./src/navigation/RootNavigator";
 import AdminNavigator from "./src/navigation/AdminNavigator";
-import AuthNavigator from "./src/navigation/AuthNavigator"; // <--- IMPORTA QUESTO
+import AuthNavigator from "./src/navigation/AuthNavigator";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { refresh } from "./src/services/auth";
 import { View, ActivityIndicator } from "react-native";
@@ -12,13 +12,15 @@ export default function App() {
   const [ruolo, setRuolo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Carica ruolo all'avvio
+  {
+    /* Controlla lo stato di autenticazione all'avvio dell'app */
+  }
   useEffect(() => {
     async function init() {
       try {
         const storedRole = await AsyncStorage.getItem("ruolo");
-        setRuolo(storedRole); // Se non c'è, sarà null
-      } catch(e) {
+        setRuolo(storedRole);
+      } catch (e) {
         console.log(e);
       } finally {
         setIsLoading(false);
@@ -26,8 +28,6 @@ export default function App() {
     }
     init();
   }, []);
-
-  // ... il tuo codice per il refresh token resta uguale ...
 
   if (isLoading) {
     return (
@@ -39,9 +39,7 @@ export default function App() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      {/* Usiamo key={ruolo} per forzare il re-render completo quando cambia stato */}
-      <NavigationContainer key={ruolo}> 
-        
+      <NavigationContainer key={ruolo}>
         {/* SE NON LOGGATO (ruolo è null) -> VAI ALL'AUTH NAVIGATOR */}
         {ruolo === null && <AuthNavigator setRuolo={setRuolo} />}
 
@@ -50,7 +48,6 @@ export default function App() {
 
         {/* SE ADMIN -> VAI ALL'ADMIN NAVIGATOR */}
         {ruolo === "admin" && <AdminNavigator setRuolo={setRuolo} />}
-
       </NavigationContainer>
     </GestureHandlerRootView>
   );
