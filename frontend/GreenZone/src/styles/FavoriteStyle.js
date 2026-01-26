@@ -18,7 +18,7 @@ export default StyleSheet.create({
     paddingTop: 50,
     paddingBottom: 10,
     textAlign: "center",
-    color: "#333",
+    color: "#14948B",
   },
 
   emptyText: {

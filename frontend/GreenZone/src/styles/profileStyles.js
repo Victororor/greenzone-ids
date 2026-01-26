@@ -30,6 +30,7 @@ export default StyleSheet.create({
     marginTop: 40,
     marginBottom: 10,
     marginLeft: 4, // Allineamento ottico con le card
+    textAlign: "center",
   },
 
   sectionTitle1: {
@@ -39,6 +40,7 @@ export default StyleSheet.create({
     marginTop: 24, // Spazio separatore tra le sezioni
     marginBottom: 10,
     marginLeft: 4,
+    textAlign: "center",
   },
 
   item: {

@@ -24,6 +24,8 @@ export default function RootNavigator({ setRuolo }) {
           headerShown: true,
           headerBackVisible: false,
           headerLeft: () => null,
+          headerTitleAlign: "center",
+          headerTintColor: "#14948B",
         }}
       />
 
@@ -66,7 +68,9 @@ export default function RootNavigator({ setRuolo }) {
       <Stack.Screen
         name="Sending"
         component={SendingPlaceScreen}
-        options={{ title: "Segnalazione", headerBackTitle: "Indietro" }}
+        options={{ 
+          title: "Segnalazione", 
+          headerBackTitle: "Indietro" }}
       />
     </Stack.Navigator>
   );

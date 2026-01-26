@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, ActivityIndicator, Pressable, Alert, StyleSheet } from "react-native";
 import AdminBottomBar from "../components/AdminBottomBar";
 import { getSuggestionsPending, approveSuggestion, rejectSuggestion } from "../services/placeSuggestion";
+import styles from "../styles/AdminSuggestionStyle";
 
 
 
@@ -56,7 +57,7 @@ export default function AdminSuggestionsScreen({ setRuolo }) {
     <View style={styles.card}>
       <Text style={styles.title}>{item.name}</Text>
       {item.location?.city && (
-        <Text style={styles.subtitle}>{item.location.city}</Text>
+        <Text style={styles.subtitle}>{item.location.address}, {item.location.city}</Text>
       )}
       {item.description && (
         <Text style={styles.desc}>{item.description}</Text>
@@ -95,32 +96,3 @@ export default function AdminSuggestionsScreen({ setRuolo }) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 15, backgroundColor: "#fff" },
-  header: { fontSize: 22, fontWeight: "bold", marginBottom: 15 },
-  card: {
-    backgroundColor: "#f3f4f6",
-    padding: 15,
-    borderRadius: 8,
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: "#e5e7eb",
-  },
-  title: { fontSize: 18, fontWeight: "bold" },
-  subtitle: { fontSize: 14, color: "#555" },
-  desc: { marginTop: 6, color: "#444" },
-  row: {
-    flexDirection: "row",
-    marginTop: 10,
-    justifyContent: "space-between"
-  },
-  btn: {
-    paddingVertical: 8,
-    paddingHorizontal: 14,
-    borderRadius: 6,
-    
-  },
-  approve: { backgroundColor: "#10b981" },
-  reject: { backgroundColor: "#ef4444" },
-  btnText: { color: "#fff", fontWeight: "bold" },
-});

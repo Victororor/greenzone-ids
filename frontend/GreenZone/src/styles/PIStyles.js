@@ -13,7 +13,7 @@ export default StyleSheet.create({
   title: {
     fontSize: 30,
     fontWeight: "600",
-    color: "#111827",
+    color: "#14948B",
   },
   subtitle: {
     fontSize: 15,

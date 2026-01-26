@@ -15,8 +15,9 @@ export default function AdminNavigator({ setRuolo }) {
       <Stack.Screen
         name="AdminSuggestions"
         options={{
-          headerShown: true,
-          title: "Segnalazioni",
+          headerShown: false,
+          headerBackVisible: false,
+          headerLeft: () => null,
         }}
       >
         {(props) => <AdminSuggestion {...props} setRuolo={setRuolo} />}
