@@ -25,7 +25,7 @@ export default function AppInfoScreen() {
         <Text style={styles.text}>
           React Native{"\n"}
           Firebase • Firestore{"\n"}
-          Google Maps API
+          Expo-location{"\n"}
         </Text>
       </View>
 

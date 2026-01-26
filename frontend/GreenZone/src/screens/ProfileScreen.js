@@ -45,8 +45,6 @@ export default function ProfileScreen({ setRuolo }) {
   return (
     <View style={styles.container}>
 
-
-
       <ScrollView contentContainerStyle={styles.inner}>
         
         <Text style={styles.sectionTitle}>Account</Text>
@@ -77,5 +75,4 @@ export default function ProfileScreen({ setRuolo }) {
     </View>
   );
 }
-
 

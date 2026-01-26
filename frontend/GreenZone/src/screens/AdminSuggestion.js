@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, ActivityIndicator, Pressable, Alert, StyleSheet } from "react-native";
+import AdminBottomBar from "../components/AdminBottomBar";
 import { getSuggestionsPending, approveSuggestion, rejectSuggestion } from "../services/placeSuggestion";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { logout } from "../services/auth";
+
+
 
 
 export default function AdminSuggestionsScreen({ setRuolo }) {
@@ -50,23 +51,6 @@ export default function AdminSuggestionsScreen({ setRuolo }) {
 
   }, []);
 
-  async function handleLogout() {
-    try {
-      const idToken = await AsyncStorage.getItem("idToken");
-      if (idToken) await logout(idToken);
-
-      // Pulizia dati
-      await AsyncStorage.multiRemove(["idToken", "ruolo", "refreshToken", "nome", "cognome", "email"]);
-      
-      setRuolo(null);
-
-      
-    } catch (error) {
-      console.error("LOGOUT ERROR:", error);
-      await AsyncStorage.clear();
-      setRuolo(null);
-    }
-}
 
   const renderItem = ({ item }) => (
     <View style={styles.card}>
@@ -106,13 +90,7 @@ export default function AdminSuggestionsScreen({ setRuolo }) {
           contentContainerStyle={{ paddingBottom: 40 }}
         />
       )}
-
-      <Pressable style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={styles.logoutText}>Logout</Text>
-      </Pressable>
-
-
-
+      <AdminBottomBar />
     </View>
   );
 }
@@ -140,25 +118,9 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 14,
     borderRadius: 6,
+    
   },
   approve: { backgroundColor: "#10b981" },
   reject: { backgroundColor: "#ef4444" },
   btnText: { color: "#fff", fontWeight: "bold" },
-
-  logoutButton: {
-    marginTop: "auto",
-    width: "100%",
-    height: 52,
-    marginBottom: 20,
-    borderRadius: 30,
-    backgroundColor: "#14948B",
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-  },
-  logoutText: {
-    color: "#FFFFFF",
-    fontSize: 18,
-    fontWeight: "600",
-  },
 });
