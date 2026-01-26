@@ -4,13 +4,13 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#f0f0f0", // Uniformato allo sfondo App
+    backgroundColor: "#f0f0f0",
   },
 
   header: {
     fontSize: 26,
     fontWeight: "700",
-    color: "#14948B", // Colore Brand (Verde Petrolio)
+    color: "#14948B",
     marginBottom: 20,
     marginTop: 20,
   },
@@ -18,7 +18,7 @@ export default StyleSheet.create({
   card: {
     backgroundColor: "#FFFFFF", // Card Bianca
     padding: 16,
-    borderRadius: 16, // Arrotondamento più morbido
+    borderRadius: 16,
     marginBottom: 16,
   },
 
@@ -32,13 +32,13 @@ export default StyleSheet.create({
   subtitle: {
     fontSize: 15,
     fontWeight: "600",
-    color: "#4B5563", // Grigio scuro
+    color: "#4B5563",
     marginBottom: 8,
   },
 
   desc: {
     fontSize: 14,
-    color: "#6B7280", // Grigio medio per descrizione
+    color: "#6B7280",
     lineHeight: 20,
     marginBottom: 12,
   },
@@ -47,11 +47,11 @@ export default StyleSheet.create({
     flexDirection: "row",
     marginTop: 10,
     justifyContent: "space-between",
-    gap: 10, // Spazio tra i bottoni
+    gap: 10,
   },
 
   btn: {
-    flex: 1, // I bottoni si dividono lo spazio equamente
+    flex: 1,
     paddingVertical: 12,
     borderRadius: 10,
     alignItems: "center",
@@ -59,11 +59,11 @@ export default StyleSheet.create({
   },
 
   approve: {
-    backgroundColor: "#10b981", // Verde successo
+    backgroundColor: "#10b981",
   },
 
   reject: {
-    backgroundColor: "#ef4444", // Rosso errore
+    backgroundColor: "#ef4444",
   },
 
   btnText: {
@@ -71,13 +71,12 @@ export default StyleSheet.create({
     fontWeight: "700",
     fontSize: 15,
   },
-  
-  // Aggiunto stile per il messaggio "Nessuna segnalazione"
+
   emptyText: {
     textAlign: "center",
     marginTop: 40,
     fontSize: 16,
     color: "#6B7280",
     fontStyle: "italic",
-  }
+  },
 });

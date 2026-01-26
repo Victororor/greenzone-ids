@@ -1,6 +1,10 @@
 import { apiGet, apiPost } from "./api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+{
+  /* Funzioni per la gestione delle segnalazioni di nuovi luoghi */
+}
+
 export async function createPlaceSuggestion(suggestionData) {
   const idToken = await AsyncStorage.getItem("idToken");
   return apiPost("/api/placeSuggestion", suggestionData, {
@@ -17,14 +21,22 @@ export async function getSuggestionsPending() {
 
 export async function approveSuggestion(id) {
   const idToken = await AsyncStorage.getItem("idToken");
-  return apiPost(`/api/placeSuggestion/${id}/approve`, {}, {
-    Authorization: `Bearer ${idToken}`,
-  });
+  return apiPost(
+    `/api/placeSuggestion/${id}/approve`,
+    {},
+    {
+      Authorization: `Bearer ${idToken}`,
+    },
+  );
 }
 
 export async function rejectSuggestion(id) {
   const idToken = await AsyncStorage.getItem("idToken");
-  return apiPost(`/api/placeSuggestion/${id}/reject`, {}, {
-    Authorization: `Bearer ${idToken}`,
-  });
+  return apiPost(
+    `/api/placeSuggestion/${id}/reject`,
+    {},
+    {
+      Authorization: `Bearer ${idToken}`,
+    },
+  );
 }

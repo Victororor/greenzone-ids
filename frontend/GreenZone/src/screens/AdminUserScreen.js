@@ -15,8 +15,6 @@ import {
 } from "react-native-gesture-handler";
 import styles from "../styles/AdminUserScreenStyle";
 import AdminBottomBar from "../components/AdminBottomBar";
-
-// 1. IMPORTA DAL NUOVO SERVICE
 import { getAllUsers, deleteUser } from "../services/user";
 
 export default function AdminUsersScreen() {
@@ -25,6 +23,10 @@ export default function AdminUsersScreen() {
 
   let row = [];
   let prevOpenedRow;
+
+  {
+    /* Carica gli utenti dall'API */
+  }
 
   async function loadUsers() {
     try {
@@ -47,6 +49,9 @@ export default function AdminUsersScreen() {
     loadUsers();
   }, []);
 
+  {
+  }
+
   async function handleDelete(uid) {
     try {
       await deleteUser(uid);
@@ -57,6 +62,10 @@ export default function AdminUsersScreen() {
       console.log("Errore rimozione:", e);
       Alert.alert("Errore", "Impossibile eliminare l'utente.");
     }
+  }
+
+  {
+    /* Conferma eliminazione utente */
   }
 
   const confirmDelete = (uid) => {
@@ -74,6 +83,9 @@ export default function AdminUsersScreen() {
     );
   };
 
+  {
+    /* Renderizza le azioni di swipe per eliminare */
+  }
   const renderRightActions = (progress, dragX, uid) => {
     return (
       <View style={styles.rightActionContainer}>
@@ -93,8 +105,10 @@ export default function AdminUsersScreen() {
     );
   };
 
+  {
+    /* Gestione chiusura righe swipe aperte */
+  }
   const closeRow = (index) => {
-    // Nota: qui usiamo l'indice dell'array per gestire i ref delle righe
     if (prevOpenedRow && prevOpenedRow !== row[index]) {
       prevOpenedRow.close();
     }

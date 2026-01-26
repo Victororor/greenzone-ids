@@ -1,16 +1,16 @@
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
- container: {
+  container: {
     flex: 1,
-    backgroundColor: "#f0f0f0", 
+    backgroundColor: "#f0f0f0",
     paddingHorizontal: 20,
     paddingTop: 20,
   },
   headerTitle: {
     fontSize: 26,
     fontWeight: "700",
-    color: "#14948B", 
+    color: "#14948B",
     marginVertical: 20,
   },
   emptyText: {
@@ -39,7 +39,7 @@ export default StyleSheet.create({
   cardCategory: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#14948B", 
+    color: "#14948B",
     marginBottom: 8,
   },
   rowInfo: {
@@ -52,7 +52,6 @@ export default StyleSheet.create({
     color: "#4B5563",
   },
 
-  // MODALE STYLES
   modalOverlay: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.5)",
@@ -63,7 +62,7 @@ export default StyleSheet.create({
     backgroundColor: "#FFF",
     borderRadius: 16,
     padding: 20,
-    maxHeight: "85%", // Limite altezza per schermi piccoli Android
+    maxHeight: "85%",
     elevation: 10,
   },
   modalHeaderRow: {
@@ -88,25 +87,23 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderColor: "#D1D5DB",
     borderRadius: 8,
-    padding: 10, // Un po' meno padding per Android
+    padding: 10,
     fontSize: 16,
     backgroundColor: "#F9FAFB",
     color: "#111",
   },
-  
-  // STILE PICKER PER ANDROID
+
   pickerContainer: {
     borderWidth: 1,
     borderColor: "#D1D5DB",
     borderRadius: 8,
     backgroundColor: "#F9FAFB",
-    justifyContent: 'center',
-    height: 55, // Altezza fissa necessaria per il layout Android
+    justifyContent: "center",
+    height: 55,
   },
   picker: {
     color: "#111",
-    // Su Android il picker prende tutto lo spazio disponibile nel container
-    width: "100%", 
+    width: "100%",
   },
 
   saveBtn: {
@@ -123,7 +120,7 @@ export default StyleSheet.create({
     fontSize: 16,
   },
   deleteBtn: {
-    backgroundColor: "#FEE2E2", 
+    backgroundColor: "#FEE2E2",
     borderRadius: 10,
     paddingVertical: 14,
     marginTop: 12,
@@ -132,7 +129,7 @@ export default StyleSheet.create({
     borderColor: "#EF4444",
   },
   deleteBtnText: {
-    color: "#EF4444", 
+    color: "#EF4444",
     fontWeight: "bold",
     fontSize: 16,
   },

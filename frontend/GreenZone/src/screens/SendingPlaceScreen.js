@@ -32,6 +32,9 @@ export default function SendingPlaceScreen() {
   const [coords, setCoords] = useState(null);
   const [loadingLocation, setLoadingLocation] = useState(true);
 
+  {
+    /* Ottieni la posizione dell'utente all'avvio */
+  }
   useEffect(() => {
     (async () => {
       try {
@@ -69,6 +72,9 @@ export default function SendingPlaceScreen() {
     navigation.navigate(screen);
   }
 
+  {
+    /* Ricarica la posizione dell'utente */
+  }
   async function reloadPosition() {
     try {
       setLoadingLocation(true);
@@ -100,6 +106,9 @@ export default function SendingPlaceScreen() {
     }
   }
 
+  {
+    /* Invia la segnalazione del luogo */
+  }
   async function submit() {
     if (!name || !category) {
       return Alert.alert("Errore", "Inserisci nome e categoria.");
@@ -155,7 +164,6 @@ export default function SendingPlaceScreen() {
           Proponi un luogo sostenibile nella tua zona
         </Text>
 
-        {/* Nome */}
         <View style={styles.inputWrapper}>
           <TextInput
             placeholder="Nome del luogo"
@@ -165,7 +173,6 @@ export default function SendingPlaceScreen() {
           />
         </View>
 
-        {/* Categoria */}
         <View style={styles.pickerWrapper}>
           <Picker
             selectedValue={category}
@@ -178,7 +185,6 @@ export default function SendingPlaceScreen() {
           </Picker>
         </View>
 
-        {/* Descrizione */}
         <View style={[styles.inputWrapper, { height: 90 }]}>
           <TextInput
             placeholder="Descrizione (opzionale)"
@@ -189,7 +195,6 @@ export default function SendingPlaceScreen() {
           />
         </View>
 
-        {/* Location */}
         {coords && (
           <Text style={{ fontSize: 12, color: "#6B7280", marginBottom: 10 }}>
             Posizione rilevata: {coords.address ? `${coords.address}, ` : ""}

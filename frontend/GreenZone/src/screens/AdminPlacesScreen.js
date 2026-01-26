@@ -18,7 +18,6 @@ import { Picker } from "@react-native-picker/picker";
 import { getAllPlaces, updatePlace, deletePlace } from "../services/place";
 import styles from "../styles/AdminPlacesStyle";
 
-// Opzioni del menù a tendina
 const CATEGORIES = [
   { value: "restaurant", label: "Ristorante" },
   { value: "shop", label: "Negozio" },
@@ -33,17 +32,18 @@ export default function AdminPlacesScreen() {
   const [loading, setLoading] = useState(true);
   const [places, setPlaces] = useState([]);
 
-  // Stati per il Modale
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedPlace, setSelectedPlace] = useState(null);
 
-  // Campi del form
   const [editName, setEditName] = useState("");
   const [editCategory, setEditCategory] = useState("other");
   const [editCity, setEditCity] = useState("");
   const [editAddress, setEditAddress] = useState("");
   const [editDescription, setEditDescription] = useState("");
 
+  {
+    /* Carica i luoghi dall'API */
+  }
   async function loadPlaces() {
     try {
       setLoading(true);
@@ -57,6 +57,9 @@ export default function AdminPlacesScreen() {
     }
   }
 
+  {
+    /* Carica i luoghi all'avvio */
+  }
   useEffect(() => {
     loadPlaces();
   }, []);
@@ -73,6 +76,9 @@ export default function AdminPlacesScreen() {
     setModalVisible(true);
   }
 
+  {
+    /* Salva le modifiche al luogo */
+  }
   async function handleSave() {
     if (!selectedPlace) return;
 
@@ -98,6 +104,9 @@ export default function AdminPlacesScreen() {
     }
   }
 
+  {
+    /* Elimina il luogo */
+  }
   async function handleDelete() {
     if (!selectedPlace) return;
 
@@ -165,14 +174,12 @@ export default function AdminPlacesScreen() {
         />
       )}
 
-      {/* --- MODALE --- */}
       <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
-        {/* Solo behavior="height" per Android */}
         <KeyboardAvoidingView behavior="height" style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeaderRow}>
@@ -203,7 +210,7 @@ export default function AdminPlacesScreen() {
                   selectedValue={editCategory}
                   onValueChange={(itemValue) => setEditCategory(itemValue)}
                   style={styles.picker}
-                  mode="dropdown" // Stile Android popup
+                  mode="dropdown"
                 >
                   {CATEGORIES.map((cat) => (
                     <Picker.Item
@@ -229,7 +236,6 @@ export default function AdminPlacesScreen() {
                 onChangeText={setEditAddress}
               />
 
-              {/* Bottoni */}
               <Pressable style={styles.saveBtn} onPress={handleSave}>
                 <Text style={styles.saveBtnText}>Salva Modifiche</Text>
               </Pressable>

@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f0f0f0", 
+    backgroundColor: "#f0f0f0",
   },
 
   center: {
@@ -30,10 +30,10 @@ export default StyleSheet.create({
 
   cardWrapper: {
     marginHorizontal: 18,
-    marginBottom: 12,     
-    borderRadius: 14,    
-    overflow: "hidden",   
-    backgroundColor: "#FFFFFF", 
+    marginBottom: 12,
+    borderRadius: 14,
+    overflow: "hidden",
+    backgroundColor: "#FFFFFF",
   },
 
   category: {
@@ -53,7 +53,6 @@ export default StyleSheet.create({
     fontWeight: "600",
     color: "#111827",
   },
-
 
   card: {
     backgroundColor: "#FFFFFF",

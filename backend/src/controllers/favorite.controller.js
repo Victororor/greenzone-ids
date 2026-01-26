@@ -2,7 +2,7 @@ const { z } = require("zod");
 const favoriteService = require("../services/favorite.service");
 const { AppError } = require("../utils/errorHandler");
 
-// schema Zod per placeId
+
 const placeIdSchema = z.string().min(1, "placeId mancante o non valido");
 
 /**

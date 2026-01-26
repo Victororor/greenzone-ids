@@ -1,20 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, ActivityIndicator, Pressable, Alert, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  ActivityIndicator,
+  Pressable,
+  Alert,
+  StyleSheet,
+} from "react-native";
 import AdminBottomBar from "../components/AdminBottomBar";
-import { getSuggestionsPending, approveSuggestion, rejectSuggestion } from "../services/placeSuggestion";
+import {
+  getSuggestionsPending,
+  approveSuggestion,
+  rejectSuggestion,
+} from "../services/placeSuggestion";
 import styles from "../styles/AdminSuggestionStyle";
-
-
-
 
 export default function AdminSuggestionsScreen({ setRuolo }) {
   const [loading, setLoading] = useState(true);
   const [suggestions, setSuggestions] = useState([]);
 
+  {
+    /* Carica le segnalazioni dall'API */
+  }
   async function loadSuggestions() {
     try {
       setLoading(true);
-      const res = await getSuggestionsPending(); // GET /api/placeSuggestion
+      const res = await getSuggestionsPending();
       setSuggestions(res.data.suggestions || []);
     } catch (err) {
       console.log("LOAD ERROR:", err);
@@ -22,6 +34,10 @@ export default function AdminSuggestionsScreen({ setRuolo }) {
     } finally {
       setLoading(false);
     }
+  }
+
+  {
+    /* Approva una segnalazione */
   }
 
   async function handleApprove(id) {
@@ -35,6 +51,9 @@ export default function AdminSuggestionsScreen({ setRuolo }) {
     }
   }
 
+  {
+    /* Rifiuta una segnalazione */
+  }
   async function handleReject(id) {
     try {
       await rejectSuggestion(id); // POST /reject
@@ -48,27 +67,30 @@ export default function AdminSuggestionsScreen({ setRuolo }) {
 
   useEffect(() => {
     loadSuggestions();
-
-
   }, []);
-
 
   const renderItem = ({ item }) => (
     <View style={styles.card}>
       <Text style={styles.title}>{item.name}</Text>
       {item.location?.city && (
-        <Text style={styles.subtitle}>{item.location.address}, {item.location.city}</Text>
+        <Text style={styles.subtitle}>
+          {item.location.address}, {item.location.city}
+        </Text>
       )}
-      {item.description && (
-        <Text style={styles.desc}>{item.description}</Text>
-      )}
-      
+      {item.description && <Text style={styles.desc}>{item.description}</Text>}
+
       <View style={styles.row}>
-        <Pressable style={[styles.btn, styles.approve]} onPress={() => handleApprove(item.id)}>
+        <Pressable
+          style={[styles.btn, styles.approve]}
+          onPress={() => handleApprove(item.id)}
+        >
           <Text style={styles.btnText}>Approva</Text>
         </Pressable>
 
-        <Pressable style={[styles.btn, styles.reject]} onPress={() => handleReject(item.id)}>
+        <Pressable
+          style={[styles.btn, styles.reject]}
+          onPress={() => handleReject(item.id)}
+        >
           <Text style={styles.btnText}>Rifiuta</Text>
         </Pressable>
       </View>
@@ -95,4 +117,3 @@ export default function AdminSuggestionsScreen({ setRuolo }) {
     </View>
   );
 }
-

@@ -12,6 +12,8 @@ import { useNavigation } from "@react-navigation/native";
 
 const Stack = createNativeStackNavigator();
 
+{/* Navigator per l'utente */}
+
 export default function RootNavigator({ setRuolo }) {
   return (
     <Stack.Navigator>

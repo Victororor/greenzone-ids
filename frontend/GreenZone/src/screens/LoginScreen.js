@@ -22,6 +22,9 @@ export default function LoginScreen({ navigation, setRuolo }) {
   const [showPassword, setShowPassword] = useState(false);
   const [ruolo, setRole] = useState(null);
 
+  {
+    /* Funzione di login */
+  }
   async function handleLogin() {
     if (!email.trim() || !password) {
       Alert.alert("Errore", "Per favore, inserisci email e password.");
@@ -39,10 +42,8 @@ export default function LoginScreen({ navigation, setRuolo }) {
       await AsyncStorage.setItem("nome", data.data.user.nome);
       await AsyncStorage.setItem("cognome", data.data.user.cognome);
       await AsyncStorage.setItem("email", data.data.user.email);
-      
+
       setRuolo(data.data.user.ruolo);
-
-
     } catch (error) {
       console.error("LOGIN ERROR:", error);
       Alert.alert(
@@ -57,11 +58,9 @@ export default function LoginScreen({ navigation, setRuolo }) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
-        {/* TOP */}
         <View style={styles.center}>
           <Text style={styles.title}>Accedi</Text>
 
-          {/* EMAIL */}
           <View style={styles.inputWrapper}>
             <Ionicons name="mail-outline" size={20} color="#6B7280" />
             <TextInput
@@ -75,7 +74,6 @@ export default function LoginScreen({ navigation, setRuolo }) {
             />
           </View>
 
-          {/* PASSWORD */}
           <View style={styles.inputWrapper}>
             <Ionicons name="lock-closed-outline" size={20} color="#6B7280" />
             <TextInput
@@ -95,7 +93,6 @@ export default function LoginScreen({ navigation, setRuolo }) {
             </Pressable>
           </View>
 
-          {/* BUTTON LOGIN */}
           <Pressable
             style={[styles.button, loading && { opacity: 0.7 }]}
             onPress={handleLogin}
@@ -133,7 +130,6 @@ export default function LoginScreen({ navigation, setRuolo }) {
           </Pressable>
         </View>
 
-        {/* FOOTER */}
         <View style={styles.footer}>
           <Image
             source={require("../../assets/leaf.png")}

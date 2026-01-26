@@ -8,7 +8,7 @@ import {
   Pressable,
   Modal,
   Platform,
-  StatusBar
+  StatusBar,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import MapView, { Marker } from "react-native-maps";
@@ -19,7 +19,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "../styles/MapStyles";
 
 const TAB_BAR_HEIGHT = 104;
-
 
 const CAT_LABELS = {
   shop: "Negozio Bio",
@@ -55,6 +54,9 @@ export default function HomeScreen() {
 
   const [selectedPlace, setSelectedPlace] = useState(null);
 
+  {
+    /* Carica posizione, luoghi e preferiti all'avvio */
+  }
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -76,20 +78,22 @@ export default function HomeScreen() {
           Authorization: `Bearer ${idToken}`,
         });
         setFavorites(favRes.data.favorites || []);
-        
       } catch (e) {
         console.log("ERR CARICAMENTO:", e);
       }
     })();
   }, []);
 
-  // ====== FAVORITE IDS ======
+  {
+    /* Calcola gli ID dei preferiti */
+  }
   const favoriteIds = useMemo(() => {
-    // Usiamo String() per sicurezza, anche se dal tuo JSON sembrano già stringhe
     return favorites.map((f) => String(f.id));
   }, [favorites]);
 
-  // ====== FILTERED PLACES ======
+  {
+    /* Filtra i luoghi in base al filtro selezionato */
+  }
   const filteredPlaces = useMemo(() => {
     if (selectedFilter === "favorites") {
       return places.filter((p) => favoriteIds.includes(String(p.id)));
@@ -100,21 +104,27 @@ export default function HomeScreen() {
     return places;
   }, [places, favoriteIds, selectedFilter]);
 
-  // ====== READY STATE ======
   const isReady = location && mapReady;
 
-  // ====== CHECK SE GIÀ NEI PREFERITI (Per la card in basso) ======
-  const alreadyFav = selectedPlace && favoriteIds.includes(String(selectedPlace.id));
+  const alreadyFav =
+    selectedPlace && favoriteIds.includes(String(selectedPlace.id));
 
+  {
+    /* Aggiungi il luogo selezionato ai preferiti */
+  }
   async function handleAddFavorite() {
     try {
       const idToken = await AsyncStorage.getItem("idToken");
 
-      await apiPost(`/api/favorites/${selectedPlace.id}`, {}, {
-        Authorization: `Bearer ${idToken}`
-      });
+      await apiPost(
+        `/api/favorites/${selectedPlace.id}`,
+        {},
+        {
+          Authorization: `Bearer ${idToken}`,
+        },
+      );
 
-      setFavorites(prev => [...prev, { id: selectedPlace.id }]);
+      setFavorites((prev) => [...prev, { id: selectedPlace.id }]);
     } catch (error) {
       console.log("Errore aggiunta preferito:", error);
       Alert.alert("Errore", "Impossibile aggiungere ai preferiti al momento.");
@@ -176,20 +186,17 @@ export default function HomeScreen() {
           onMapReady={() => setMapReady(true)}
         >
           {filteredPlaces.map((place) => {
-            // CORREZIONE CRUCIALE: Il calcolo deve avvenire QUI, per ogni singolo posto
             const isFav = favoriteIds.includes(String(place.id));
-            
+
             return (
               <Marker
-                // Aggiungiamo isFav alla key per forzare il re-render se cambia stato
-                key={`${place.id}-${isFav}`} 
+                key={`${place.id}-${isFav}`}
                 coordinate={{
                   latitude: place.location.latitude,
                   longitude: place.location.longitude,
                 }}
                 title={place.name}
-                // Ora isFav è specifico per QUESTO marker
-                pinColor={isFav ? "#FFD700" : "#14948B"} 
+                pinColor={isFav ? "#FFD700" : "#14948B"}
                 onPress={() => setSelectedPlace(place)}
               />
             );

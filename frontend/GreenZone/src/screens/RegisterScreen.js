@@ -23,6 +23,9 @@ export default function RegisterScreen({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  {
+    /* Funzione di registrazione */
+  }
   async function handleRegister() {
     if (!nome.trim() || !cognome.trim() || !email.trim() || !password) {
       Alert.alert("Errore", "Per favore, compila tutti i campi.");
@@ -35,7 +38,7 @@ export default function RegisterScreen({ navigation }) {
         email.trim(),
         password,
         nome.trim(),
-        cognome.trim()
+        cognome.trim(),
       );
       console.log("REGISTER OK:", data);
       Alert.alert("Successo", "Registrazione effettuata! Effettua il login.");
@@ -44,7 +47,7 @@ export default function RegisterScreen({ navigation }) {
       console.log("REGISTER ERROR:", error);
       Alert.alert(
         "Registrazione fallita",
-        error.message || "Si è verificato un errore."
+        error.message || "Si è verificato un errore.",
       );
     } finally {
       setLoading(false);
@@ -55,14 +58,12 @@ export default function RegisterScreen({ navigation }) {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
         <View style={styles.center}>
-          {/* TOP */}
           <Text style={styles.title}>Crea un account</Text>
           <Text style={styles.subtitle}>
             Registrati per iniziare a utilizzare GreenZone e proteggere il tuo
             ambiente!
           </Text>
 
-          {/* NAME */}
           <View style={styles.inputWrapper}>
             <Ionicons name="person-outline" size={20} color="#6B7280" />
             <TextInput
@@ -74,7 +75,6 @@ export default function RegisterScreen({ navigation }) {
             />
           </View>
 
-          {/* SURNAME */}
           <View style={styles.inputWrapper}>
             <Ionicons name="person-outline" size={20} color="#6B7280" />
             <TextInput
@@ -86,7 +86,6 @@ export default function RegisterScreen({ navigation }) {
             />
           </View>
 
-          {/* EMAIL */}
           <View style={styles.inputWrapper}>
             <Ionicons name="mail-outline" size={20} color="#6B7280" />
             <TextInput
@@ -100,7 +99,6 @@ export default function RegisterScreen({ navigation }) {
             />
           </View>
 
-          {/* PASSWORD */}
           <View style={styles.inputWrapper}>
             <Ionicons name="lock-closed-outline" size={20} color="#6B7280" />
             <TextInput
@@ -120,7 +118,6 @@ export default function RegisterScreen({ navigation }) {
             </Pressable>
           </View>
 
-          {/* REGISTER BUTTON */}
           <Pressable
             style={[styles.button, loading && { opacity: 0.7 }]}
             onPress={handleRegister}
@@ -144,7 +141,6 @@ export default function RegisterScreen({ navigation }) {
             <View style={{ flex: 1, height: 5, backgroundColor: "#D1D5DB" }} />
           </View>
 
-          {/* HAVE ACCOUNT */}
           <Text style={{ marginBottom: 10, color: "#6B7280" }}>
             Hai già un account?
           </Text>
@@ -157,7 +153,6 @@ export default function RegisterScreen({ navigation }) {
           </Pressable>
         </View>
 
-        {/* FOOTER */}
         <View style={styles.footer}>
           <Image
             source={require("../../assets/leaf.png")}

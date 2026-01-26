@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  Pressable,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import { View, Text, Pressable, StyleSheet, ScrollView } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AdminBottomBar from "../components/AdminBottomBar";
 import { logout } from "../services/auth";
@@ -14,15 +8,16 @@ import styles from "../styles/profileStyles";
 
 export default function AdminDashboard({ setRuolo }) {
   const navigation = useNavigation();
-  
-  // MANCAVANO QUESTI STATE:
+
   const [nome, setNome] = useState("");
   const [cognome, setCognome] = useState("");
 
   function goTo(screen) {
     navigation.navigate(screen);
   }
-
+  {
+    /* Carica nome e cognome dall'AsyncStorage all'avvio */
+  }
   useEffect(() => {
     (async () => {
       const n = await AsyncStorage.getItem("nome");
@@ -32,15 +27,24 @@ export default function AdminDashboard({ setRuolo }) {
     })();
   }, []);
 
+  {
+    /* Funzione di logout */
+  }
   async function handleLogout() {
     try {
       const idToken = await AsyncStorage.getItem("idToken");
       if (idToken) await logout(idToken);
 
-      await AsyncStorage.multiRemove(["idToken", "ruolo", "refreshToken", "nome", "cognome", "email"]);
-      
-      // Logout pulito
-      setRuolo(null); 
+      await AsyncStorage.multiRemove([
+        "idToken",
+        "ruolo",
+        "refreshToken",
+        "nome",
+        "cognome",
+        "email",
+      ]);
+
+      setRuolo(null);
     } catch (error) {
       console.error("LOGOUT ERROR:", error);
       await AsyncStorage.clear();
@@ -52,7 +56,7 @@ export default function AdminDashboard({ setRuolo }) {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.inner}>
         <Text style={styles.sectionTitle}>Account</Text>
-        
+
         <Pressable
           style={styles.item}
           onPress={() => goTo("PersonalInformationScreen")}
@@ -74,7 +78,7 @@ export default function AdminDashboard({ setRuolo }) {
         </Pressable>
       </ScrollView>
 
-      <AdminBottomBar/>
+      <AdminBottomBar />
     </View>
   );
 }

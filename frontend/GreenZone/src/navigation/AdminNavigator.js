@@ -9,11 +9,11 @@ import AdminUser from "../screens/AdminUserScreen";
 
 const Stack = createNativeStackNavigator();
 
+{/* Navigator per la sezione admin dell'app */}
+
 export default function AdminNavigator({ setRuolo }) {
   return (
     <Stack.Navigator initialRouteName="AdminSuggestions">
-      
-      {/* AdminSuggestions: Usa la funzione per passare setRuolo */}
       <Stack.Screen
         name="AdminSuggestions"
         options={{
@@ -25,8 +25,6 @@ export default function AdminNavigator({ setRuolo }) {
         {(props) => <AdminSuggestion {...props} setRuolo={setRuolo} />}
       </Stack.Screen>
 
-      {/* AdminDashboard: ANCHE QUI serve setRuolo per il Logout.
-          Quindi ho RIMOSSO 'component={AdminDashboard}' e lasciato solo la funzione interna. */}
       <Stack.Screen
         name="AdminDashboard"
         options={{
@@ -38,7 +36,6 @@ export default function AdminNavigator({ setRuolo }) {
         {(props) => <AdminDashboard {...props} setRuolo={setRuolo} />}
       </Stack.Screen>
 
-      {/* Le schermate sotto non hanno logout diretto, usiamo component standard */}
       <Stack.Screen
         name="PersonalInformationScreen"
         component={PersonalInformationScreen}
@@ -51,9 +48,10 @@ export default function AdminNavigator({ setRuolo }) {
       <Stack.Screen
         name="About"
         component={InfoAppScreen}
-        options={{ 
-          title: "Info App", 
-          headerBackTitle: "Indietro" }}
+        options={{
+          title: "Info App",
+          headerBackTitle: "Indietro",
+        }}
       />
 
       <Stack.Screen
@@ -75,7 +73,6 @@ export default function AdminNavigator({ setRuolo }) {
           headerLeft: () => null,
         }}
       />
-
     </Stack.Navigator>
   );
 }

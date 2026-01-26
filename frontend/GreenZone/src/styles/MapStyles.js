@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 const TAB_BAR_HEIGHT = 104;
 
 export default StyleSheet.create({
-    container: { flex: 1 },
+  container: { flex: 1 },
 
   filterButton: {
     position: "absolute",
