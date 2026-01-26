@@ -1,10 +1,11 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import AdminSuggestion from "../screens/AdminSuggestion";
+import AdminSuggestion from "../screens/AdminSuggestionScreen";
 import AdminDashboard from "../screens/AdminDashboard";
 import InfoAppScreen from "../screens/InfoAppScreen";
 import PersonalInformationScreen from "../screens/PersonalInformationScreen";
-import AdminPlaces from "../screens/AdminPlaces";
+import AdminPlaces from "../screens/AdminPlacesScreen";
+import AdminUser from "../screens/AdminUserScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -64,6 +65,17 @@ export default function AdminNavigator({ setRuolo }) {
           headerLeft: () => null,
         }}
       />
+
+      <Stack.Screen
+        name="AdminUser"
+        component={AdminUser}
+        options={{
+          headerShown: false,
+          headerBackVisible: false,
+          headerLeft: () => null,
+        }}
+      />
+
     </Stack.Navigator>
   );
 }

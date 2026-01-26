@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import AsyncStorage  from "@react-native-async-storage/async-storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MapScreen from "../screens/MapScreen";
 import FavouriteScreen from "../screens/FavouriteScreen";
@@ -13,10 +13,8 @@ import { useNavigation } from "@react-navigation/native";
 const Stack = createNativeStackNavigator();
 
 export default function RootNavigator({ setRuolo }) {
-
   return (
-    <Stack.Navigator >
-
+    <Stack.Navigator>
       <Stack.Screen
         name="Map"
         component={MapScreen}
@@ -68,9 +66,12 @@ export default function RootNavigator({ setRuolo }) {
       <Stack.Screen
         name="Sending"
         component={SendingPlaceScreen}
-        options={{ 
-          title: "Segnalazione", 
-          headerBackTitle: "Indietro" }}
+        options={{
+          title: "Segnalazione",
+          headerBackTitle: "Indietro",
+          headerTitleAlign: "center",
+          headerTintColor: "#14948B",
+        }}
       />
     </Stack.Navigator>
   );

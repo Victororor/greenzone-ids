@@ -6,48 +6,62 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 const TAB_BAR_HEIGHT = 64;
 
 export default function BottomBar() {
-    const navigation = useNavigation();
-    const route = useRoute();
+  const navigation = useNavigation();
+  const route = useRoute();
 
-    const isActive = (screenName) => route.name === screenName;
-    const color = (screenName) => (isActive(screenName) ? "#14948B" : "#9CA3AF");
+  const isActive = (screenName) => route.name === screenName;
+  const color = (screenName) => (isActive(screenName) ? "#14948B" : "#9CA3AF");
 
-    return (
-        <View style={styles.container}>
-            
-            <Pressable style={styles.item} onPress={() => navigation.navigate("AdminSuggestions")}>
-                <Ionicons
+  return (
+    <View style={styles.container}>
+      <Pressable
+        style={styles.item}
+        onPress={() => navigation.navigate("AdminSuggestions")}
+      >
+        <Ionicons
+          name={
+            isActive("AdminSuggestions") ? "add-circle" : "add-circle-outline"
+          }
+          size={26}
+          color={color("AdminSuggestions")}
+        />
+      </Pressable>
 
-                    name={isActive("AdminSuggestions") ? "add-circle" : "add-circle-outline"}
-                    size={26}
-                    color={color("AdminSuggestions")}
-                />
-            </Pressable>
+      <Pressable
+        style={styles.item}
+        onPress={() => navigation.navigate("AdminPlaces")}
+      >
+        <Ionicons
+          name={isActive("AdminPlaces") ? "location" : "location-outline"}
+          size={26}
+          color={color("AdminPlaces")}
+        />
+      </Pressable>
 
-            <Pressable style={styles.item} onPress={() => navigation.navigate("AdminPlaces")}>
-                <Ionicons
-                    name={isActive("AdminPlaces") ? "location" : "location-outline"}
-                    size={26}
-                    color={color("AdminPlaces")}
-                />
-            </Pressable>
+      <Pressable
+        style={styles.item}
+        onPress={() => navigation.navigate("AdminUser")}
+      >
+        <Ionicons
+          name={isActive("AdminUser") ? "people" : "people-outline"}
+          size={26}
+          color={color("AdminUser")}
+        />
+      </Pressable>
 
-            <Pressable style={styles.item} onPress={() => navigation.navigate("AdminDashboard")}>
-                <Ionicons
-                    name={isActive("AdminDashboard") ? "person" : "person-outline"}
-                    size={26}
-                    color={color("AdminDashboard")}
-                />
-            </Pressable>
-            
-        </View>
-    );
+      <Pressable
+        style={styles.item}
+        onPress={() => navigation.navigate("AdminDashboard")}
+      >
+        <Ionicons
+          name={isActive("AdminDashboard") ? "person" : "person-outline"}
+          size={26}
+          color={color("AdminDashboard")}
+        />
+      </Pressable>
+    </View>
+  );
 }
-
-
-
-
-
 
 const styles = StyleSheet.create({
   container: {
