@@ -3,11 +3,9 @@ import { View, Text, FlatList, ActivityIndicator, Pressable, Alert, StyleSheet }
 import { getSuggestionsPending, approveSuggestion, rejectSuggestion } from "../services/placeSuggestion";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { logout } from "../services/auth";
-import { useNavigation } from "@react-navigation/native";
 
 
 export default function AdminSuggestionsScreen({ setRuolo }) {
-  const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const [suggestions, setSuggestions] = useState([]);
 
@@ -55,22 +53,20 @@ export default function AdminSuggestionsScreen({ setRuolo }) {
   async function handleLogout() {
     try {
       const idToken = await AsyncStorage.getItem("idToken");
+      if (idToken) await logout(idToken);
 
-      if (idToken) {
-        await logout(idToken);
-      }
-
+      // Pulizia dati
       await AsyncStorage.multiRemove(["idToken", "ruolo", "refreshToken", "nome", "cognome", "email"]);
+      
       setRuolo(null);
 
-      navigation.replace("Login");
+      
     } catch (error) {
       console.error("LOGOUT ERROR:", error);
-      Alert.alert("Errore di logout", error?.message || "Riprova.");
-      navigation.replace("Login");
+      await AsyncStorage.clear();
+      setRuolo(null);
     }
-  }
-
+}
 
   const renderItem = ({ item }) => (
     <View style={styles.card}>

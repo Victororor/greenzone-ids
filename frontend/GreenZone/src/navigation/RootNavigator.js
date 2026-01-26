@@ -3,10 +3,8 @@ import { useState } from "react";
 import AsyncStorage  from "@react-native-async-storage/async-storage";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MapScreen from "../screens/MapScreen";
-import RegisterScreen from "../screens/RegisterScreen";
 import FavouriteScreen from "../screens/FavouriteScreen";
 import ProfileScreen from "../screens/ProfileScreen";
-import LoadingScreen from "../screens/LoadingScreen";
 import PersonalInformationScreen from "../screens/PersonalInformationScreen";
 import InfoAppScreen from "../screens/InfoAppScreen";
 import SendingPlaceScreen from "../screens/SendingPlaceScreen";
@@ -48,13 +46,6 @@ export default function RootNavigator({ setRuolo }) {
         }}
       >
         {(props) => <ProfileScreen {...props} setRuolo={setRuolo} />}
-      </Stack.Screen>
-
-      <Stack.Screen
-        name="Loading"
-        options={{ headerShown: false, }}
-        >
-        {(props) => <LoadingScreen {...props} setRuolo={setRuolo} />}
       </Stack.Screen>
 
       <Stack.Screen
