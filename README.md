@@ -77,16 +77,18 @@ backend/src/
 * Firebase Account (per backend e autenticazione)
 
 ### Istruzioni
+
 ```bash
 ## Frontend
 cd greenzone-ids/frontend/GreenZone
 npm install
 npx expo start
----
+```
+
 ## Backend
 ```bash
 cd greenzone-ids/backend
 npm install
 npm start
 L'app sarà accessibile tramite l'emulatore Expo o un dispositivo fisico con l'app Expo Go.
-
+```
