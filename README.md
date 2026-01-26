@@ -90,5 +90,8 @@ npx expo start
 cd greenzone-ids/backend
 npm install
 npm start
-L'app sarà accessibile tramite l'emulatore Expo o un dispositivo fisico con l'app Expo Go.
 ```
+L'app sarà accessibile tramite l'emulatore Expo o un dispositivo fisico con l'app Expo Go.
+In caso di emulatore, utilizzare l'indirizzo IP locale per connettersi al backend, nel file `api.js` in `frontend/GreenZone/src/services/`.
+Invece in caso di dispositivo fisico, utilizzare l'indirizzo IP del computer nella rete locale.
+
