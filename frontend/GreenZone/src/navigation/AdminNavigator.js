@@ -4,6 +4,7 @@ import AdminSuggestion from "../screens/AdminSuggestion";
 import AdminDashboard from "../screens/AdminDashboard";
 import InfoAppScreen from "../screens/InfoAppScreen";
 import PersonalInformationScreen from "../screens/PersonalInformationScreen";
+import AdminPlaces from "../screens/AdminPlaces";
 
 const Stack = createNativeStackNavigator();
 
@@ -49,7 +50,19 @@ export default function AdminNavigator({ setRuolo }) {
       <Stack.Screen
         name="About"
         component={InfoAppScreen}
-        options={{ title: "Info App", headerBackTitle: "Indietro" }}
+        options={{ 
+          title: "Info App", 
+          headerBackTitle: "Indietro" }}
+      />
+
+      <Stack.Screen
+        name="AdminPlaces"
+        component={AdminPlaces}
+        options={{
+          headerShown: false,
+          headerBackVisible: false,
+          headerLeft: () => null,
+        }}
       />
     </Stack.Navigator>
   );

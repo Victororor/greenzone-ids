@@ -69,4 +69,26 @@ export async function apiDelete(endpoint, headers = {}) {
   return result;
 }
 
+export async function apiPut(endpoint, body = {}, headers = {}) {
+  const url = `${apiBaseUrl}${endpoint}`;
+  const response = await fetch(url, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json", ...headers },
+    body: JSON.stringify(body),
+  });
+  const text = await response.text();
+  let result = null;
+  try {
+    result = text ? JSON.parse(text) : null;
+  }
+  catch {
+    result = { raw: text };
+  }
+  if (!response.ok) {
+    throw new Error(result?.message || "API PUT failed");
+  }
+  return result;
+}
+
+
 

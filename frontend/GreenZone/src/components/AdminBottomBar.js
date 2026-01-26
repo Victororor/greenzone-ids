@@ -23,7 +23,15 @@ export default function BottomBar() {
                     color={color("AdminSuggestions")}
                 />
             </Pressable>
-            
+
+            <Pressable style={styles.item} onPress={() => navigation.navigate("AdminPlaces")}>
+                <Ionicons
+                    name={isActive("AdminPlaces") ? "location" : "location-outline"}
+                    size={26}
+                    color={color("AdminPlaces")}
+                />
+            </Pressable>
+
             <Pressable style={styles.item} onPress={() => navigation.navigate("AdminDashboard")}>
                 <Ionicons
                     name={isActive("AdminDashboard") ? "person" : "person-outline"}

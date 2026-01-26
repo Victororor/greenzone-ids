@@ -20,13 +20,6 @@ export default StyleSheet.create({
     padding: 16,
     borderRadius: 16, // Arrotondamento più morbido
     marginBottom: 16,
-    
-    // Ombra stile App (Elevation per Android, Shadow per iOS)
-    elevation: 4,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
   },
 
   title: {
@@ -63,7 +56,6 @@ export default StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
-    elevation: 1,
   },
 
   approve: {
