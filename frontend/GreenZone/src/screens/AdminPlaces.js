@@ -42,6 +42,7 @@ export default function AdminPlacesScreen() {
   const [editCategory, setEditCategory] = useState("other");
   const [editCity, setEditCity] = useState("");
   const [editAddress, setEditAddress] = useState("");
+  const [editDescription, setEditDescription] = useState("");
 
   async function loadPlaces() {
     try {
@@ -68,6 +69,7 @@ export default function AdminPlacesScreen() {
     setEditCategory(item.category || "other");
     setEditCity(item.location?.city || "");
     setEditAddress(item.location?.address || "");
+    setEditDescription(item.description || "");
     setModalVisible(true);
   }
 
@@ -186,6 +188,13 @@ export default function AdminPlacesScreen() {
                 style={styles.input}
                 value={editName}
                 onChangeText={setEditName}
+              />
+
+              <Text style={styles.label}>Descrizione</Text>
+              <TextInput
+                style={styles.input}
+                value={editDescription}
+                onChangeText={setEditDescription}
               />
 
               <Text style={styles.label}>Categoria</Text>

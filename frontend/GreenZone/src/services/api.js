@@ -1,38 +1,71 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 export const apiBaseUrl = "http://192.168.3.247:3000";
+
+// Funzione helper per recuperare il token e preparare gli header standard
+async function getCommonHeaders(customHeaders = {}) {
+  const token = await AsyncStorage.getItem("idToken");
+  
+  return {
+    "Content-Type": "application/json",
+    // Se il token c'è, lo aggiunge. Se non c'è, non mette nulla.
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...customHeaders,
+  };
+}
 
 export async function apiPost(endpoint, body = {}, headers = {}) {
   const url = `${apiBaseUrl}${endpoint}`;
+  const allHeaders = await getCommonHeaders(headers); // Recupera token qui
 
   const response = await fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json", ...headers },
+    headers: allHeaders,
     body: JSON.stringify(body),
   });
 
-  const text = await response.text();
-  let result = null;
-
-  try {
-    result = text ? JSON.parse(text) : null;
-  } catch {
-    result = { raw: text };
-  }
-
-  if (!response.ok) {
-    throw new Error(result?.message || "API request failed");
-  }
-
-  return result;
+  return handleResponse(response);
 }
 
 export async function apiGet(endpoint, headers = {}) {
   const url = `${apiBaseUrl}${endpoint}`;
+  const allHeaders = await getCommonHeaders(headers); // Recupera token qui
 
   const response = await fetch(url, {
     method: "GET",
-    headers: { "Content-Type": "application/json", ...headers },
+    headers: allHeaders,
   });
 
+  return handleResponse(response);
+}
+
+export async function apiDelete(endpoint, headers = {}) {
+  const url = `${apiBaseUrl}${endpoint}`;
+  const allHeaders = await getCommonHeaders(headers); // Recupera token qui
+
+  const response = await fetch(url, {
+    method: "DELETE",
+    headers: allHeaders,
+  });
+  
+  return handleResponse(response);
+}
+
+export async function apiPut(endpoint, body = {}, headers = {}) {
+  const url = `${apiBaseUrl}${endpoint}`;
+  const allHeaders = await getCommonHeaders(headers); // Recupera token qui
+
+  const response = await fetch(url, {
+    method: "PUT",
+    headers: allHeaders,
+    body: JSON.stringify(body),
+  });
+  
+  return handleResponse(response);
+}
+
+// Funzione helper per gestire la risposta e gli errori (per evitare codice duplicato)
+async function handleResponse(response) {
   const text = await response.text();
   let result = null;
 
@@ -43,52 +76,8 @@ export async function apiGet(endpoint, headers = {}) {
   }
 
   if (!response.ok) {
-    throw new Error(result?.message || "API GET failed");
+    throw new Error(result?.message || `API Error: ${response.status}`);
   }
 
   return result;
 }
-
-export async function apiDelete(endpoint, headers = {}) {
-  const url = `${apiBaseUrl}${endpoint}`;
-  const response = await fetch(url, {
-    method: "DELETE",
-    headers: { "Content-Type": "application/json", ...headers },
-  });
-  const text = await response.text();
-  let result = null;
-  try {
-    result = text ? JSON.parse(text) : null;
-  }
-  catch {
-    result = { raw: text };
-  }
-  if (!response.ok) {
-    throw new Error(result?.message || "API DELETE failed");
-  }
-  return result;
-}
-
-export async function apiPut(endpoint, body = {}, headers = {}) {
-  const url = `${apiBaseUrl}${endpoint}`;
-  const response = await fetch(url, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json", ...headers },
-    body: JSON.stringify(body),
-  });
-  const text = await response.text();
-  let result = null;
-  try {
-    result = text ? JSON.parse(text) : null;
-  }
-  catch {
-    result = { raw: text };
-  }
-  if (!response.ok) {
-    throw new Error(result?.message || "API PUT failed");
-  }
-  return result;
-}
-
-
-
