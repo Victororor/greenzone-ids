@@ -5,6 +5,8 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 
 const TAB_BAR_HEIGHT = 64;
 
+{/* Componente BottomBar per la navigazione utente */}
+
 export default function BottomBar() {
   const navigation = useNavigation();
   const route = useRoute();

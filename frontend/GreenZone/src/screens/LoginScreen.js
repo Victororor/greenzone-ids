@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
 import {
   View,
   Text,
@@ -13,13 +13,18 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { login } from "../services/auth";
 import styles from "../styles/globalStyles";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen({ navigation, setRuolo }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [ruolo, setRole] = useState(null);
 
+  {
+    /* Funzione di login */
+  }
   async function handleLogin() {
     if (!email.trim() || !password) {
       Alert.alert("Errore", "Per favore, inserisci email e password.");
@@ -31,12 +36,20 @@ export default function LoginScreen({ navigation }) {
       const data = await login(email.trim(), password);
       console.log("LOGIN OK:", data);
 
-      // TODO: qui poi salvi token ecc.
+      await AsyncStorage.setItem("idToken", data.data.idToken);
+      await AsyncStorage.setItem("refreshToken", data.data.refreshToken);
+      await AsyncStorage.setItem("ruolo", data.data.user.ruolo);
+      await AsyncStorage.setItem("nome", data.data.user.nome);
+      await AsyncStorage.setItem("cognome", data.data.user.cognome);
+      await AsyncStorage.setItem("email", data.data.user.email);
 
-      navigation.replace("Home");
+      setRuolo(data.data.user.ruolo);
     } catch (error) {
-      console.log("LOGIN ERROR:", error);
-      Alert.alert("Login fallito", error.message || "Credenziali non valide.");
+      console.error("LOGIN ERROR:", error);
+      Alert.alert(
+        "Errore di accesso",
+        error.response?.data?.message || "Si è verificato un errore. Riprova.",
+      );
     } finally {
       setLoading(false);
     }
@@ -45,11 +58,9 @@ export default function LoginScreen({ navigation }) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
-        {/* TOP */}
         <View style={styles.center}>
           <Text style={styles.title}>Accedi</Text>
 
-          {/* EMAIL */}
           <View style={styles.inputWrapper}>
             <Ionicons name="mail-outline" size={20} color="#6B7280" />
             <TextInput
@@ -63,7 +74,6 @@ export default function LoginScreen({ navigation }) {
             />
           </View>
 
-          {/* PASSWORD */}
           <View style={styles.inputWrapper}>
             <Ionicons name="lock-closed-outline" size={20} color="#6B7280" />
             <TextInput
@@ -83,7 +93,6 @@ export default function LoginScreen({ navigation }) {
             </Pressable>
           </View>
 
-          {/* BUTTON LOGIN */}
           <Pressable
             style={[styles.button, loading && { opacity: 0.7 }]}
             onPress={handleLogin}
@@ -121,7 +130,6 @@ export default function LoginScreen({ navigation }) {
           </Pressable>
         </View>
 
-        {/* FOOTER */}
         <View style={styles.footer}>
           <Image
             source={require("../../assets/leaf.png")}

@@ -53,6 +53,7 @@ const signup = async (req, res, next) => {
  * Login unificato: autentica e restituisce profilo + token
  */
 const login = async (req, res, next) => {
+    console.log("🔥 [LOGIN] richiesta arrivata:", req.body);
     try {
         const validatedData = loginSchema.parse(req.body);
 
