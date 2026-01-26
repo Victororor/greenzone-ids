@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const apiBaseUrl = "http://192.168.3.247:3000";
+export const apiBaseUrl = "http://localhost:3000";
 
 {
   /* Funzione helper per ottenere gli header comuni */
