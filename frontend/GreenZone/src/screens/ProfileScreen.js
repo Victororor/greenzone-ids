@@ -1,85 +1,92 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, Pressable, StyleSheet } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import React from "react";
+import {
+  View,
+  Text,
+  Pressable,
+  Alert,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import BottomBar from "../components/BottomBar";
+import { logout } from "../services/auth";
+import { useNavigation } from "@react-navigation/native";
+import { useEffect, useState } from "react";
+import styles from "../styles/profileStyles";
 
-export default function ProfileScreen({ route }) {
-  const { setIsLogged } = route.params;
+export default function ProfileScreen({ setRuolo }) {
+  const navigation = useNavigation();
 
-  const [user, setUser] = useState(null);
+  function goTo(screen) {
+    navigation.navigate(screen);
+  }
 
-  // 🔹 Carica nome e cognome da AsyncStorage
   useEffect(() => {
-    const loadUser = async () => {
-      const storedUser = await AsyncStorage.getItem("user");
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
-      }
-    };
-    loadUser();
+    (async () => {
+      setNome(await AsyncStorage.getItem("nome"));
+      setCognome(await AsyncStorage.getItem("cognome"));
+    })();
   }, []);
 
-  const handleLogout = async () => {
-    await AsyncStorage.multiRemove(["logged", "token", "refreshToken", "user"]);
-    setIsLogged(false);
-  };
+  {
+    /* Funzione di logout */
+  }
+  async function handleLogout() {
+    try {
+      const idToken = await AsyncStorage.getItem("idToken");
+      if (idToken) await logout(idToken);
+
+      await AsyncStorage.multiRemove([
+        "idToken",
+        "ruolo",
+        "refreshToken",
+        "nome",
+        "cognome",
+        "email",
+      ]);
+
+      setRuolo(null);
+    } catch (error) {
+      console.error("LOGOUT ERROR:", error);
+
+      await AsyncStorage.clear();
+      setRuolo(null);
+    }
+  }
 
   return (
     <View style={styles.container}>
-      {/* AVATAR */}
-      <View style={styles.avatarWrapper}>
-        <Ionicons name="person-circle-outline" size={110} color="#111827" />
+      <ScrollView contentContainerStyle={styles.inner}>
+        <Text style={styles.sectionTitle}>Account</Text>
 
-        {/* Nome e Cognome*/}
-        <Text style={styles.name}>
-          {user ? `${user.nome} ${user.cognome}` : "Profilo"}
-        </Text>
-      </View>
+        <Pressable
+          style={styles.item}
+          onPress={() => goTo("PersonalInformationScreen")}
+        >
+          <Text style={styles.itemText}>Informazioni Personali</Text>
+        </Pressable>
 
-      
+        <Text style={styles.sectionTitle1}>App</Text>
 
-      {/* LOGOUT */}
-      <Pressable style={styles.logoutButton} onPress={handleLogout}>
-        <Ionicons name="log-out-outline" size={22} color="#fff" />
-        <Text style={styles.logoutText}>Logout</Text>
-      </Pressable>
+        <Pressable style={styles.item} onPress={() => goTo("Sending")}>
+          <Text style={styles.itemText}>Segnala un luogo</Text>
+        </Pressable>
+
+        <Text style={styles.sectionTitle1}>Altro</Text>
+
+        <Pressable style={styles.item} onPress={() => goTo("About")}>
+          <Text style={styles.itemText}>Info App</Text>
+        </Pressable>
+
+        <Pressable
+          style={[styles.item, { backgroundColor: "#fbeaea" }]}
+          onPress={handleLogout}
+        >
+          <Text style={[styles.itemText, { color: "#c62828" }]}>Logout</Text>
+        </Pressable>
+      </ScrollView>
 
       <BottomBar />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#F9FAFB",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 24,
-  },
-  avatarWrapper: {
-    alignItems: "center",
-    marginBottom: 40,
-  },
-  name: {
-    marginTop: 12,
-    fontSize: 20,
-    fontWeight: "600",
-    color: "#111827",
-  },
-  logoutButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#EF4444",
-    paddingVertical: 14,
-    paddingHorizontal: 32,
-    borderRadius: 12,
-  },
-  logoutText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "600",
-    marginLeft: 8,
-  },
-});

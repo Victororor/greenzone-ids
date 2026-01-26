@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
 import {
   View,
   Text,
   TextInput,
+  StyleSheet,
   Image,
   Pressable,
   Alert,
@@ -10,17 +11,20 @@ import {
   Keyboard,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { login, getMe } from "../services/auth";
+import { login } from "../services/auth";
 import styles from "../styles/globalStyles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function LoginScreen({ navigation, route }) {
-  const { setIsLogged } = route.params;
+export default function LoginScreen({ navigation, setRuolo }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [ruolo, setRole] = useState(null);
 
+  {
+    /* Funzione di login */
+  }
   async function handleLogin() {
     if (!email.trim() || !password) {
       Alert.alert("Errore", "Per favore, inserisci email e password.");
@@ -29,41 +33,23 @@ export default function LoginScreen({ navigation, route }) {
 
     try {
       setLoading(true);
+      const data = await login(email.trim(), password);
+      console.log("LOGIN OK:", data);
 
-      // 1) Login backend (ti ritorna idToken, refreshToken e user)
-      const res = await login(email.trim(), password);
-      console.log("LOGIN OK:", res);
+      await AsyncStorage.setItem("idToken", data.data.idToken);
+      await AsyncStorage.setItem("refreshToken", data.data.refreshToken);
+      await AsyncStorage.setItem("ruolo", data.data.user.ruolo);
+      await AsyncStorage.setItem("nome", data.data.user.nome);
+      await AsyncStorage.setItem("cognome", data.data.user.cognome);
+      await AsyncStorage.setItem("email", data.data.user.email);
 
-      const token = res?.data?.idToken;
-      const refreshToken = res?.data?.refreshToken;
-      let user = res?.data?.user;
-
-      if (!token) {
-        throw new Error("Token mancante nella risposta del login");
-      }
-
-      // 2) Salva token/refresh
-      await AsyncStorage.setItem("token", token);
-      if (refreshToken) {
-        await AsyncStorage.setItem("refreshToken", refreshToken);
-      }
-
-      // 3) Se il backend NON ti ha dato user, lo prendi con /api/users/me
-      if (!user) {
-        const meRes = await getMe(token);
-        user = meRes?.data?.user;
-      }
-
-      // 4) Salva profilo (nome/cognome/email/ruolo/uid)
-      if (user) {
-        await AsyncStorage.setItem("user", JSON.stringify(user));
-      }
-
-      // 5) Switch stack -> MapScreen (tramite RootNavigator)
-      setIsLogged(true);
+      setRuolo(data.data.user.ruolo);
     } catch (error) {
-      console.log("LOGIN ERROR:", error);
-      Alert.alert("Login fallito", error.message || "Credenziali non valide.");
+      console.error("LOGIN ERROR:", error);
+      Alert.alert(
+        "Errore di accesso",
+        error.response?.data?.message || "Si è verificato un errore. Riprova.",
+      );
     } finally {
       setLoading(false);
     }
@@ -72,11 +58,9 @@ export default function LoginScreen({ navigation, route }) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
-        {/* TOP */}
         <View style={styles.center}>
           <Text style={styles.title}>Accedi</Text>
 
-          {/* EMAIL */}
           <View style={styles.inputWrapper}>
             <Ionicons name="mail-outline" size={20} color="#6B7280" />
             <TextInput
@@ -90,7 +74,6 @@ export default function LoginScreen({ navigation, route }) {
             />
           </View>
 
-          {/* PASSWORD */}
           <View style={styles.inputWrapper}>
             <Ionicons name="lock-closed-outline" size={20} color="#6B7280" />
             <TextInput
@@ -110,7 +93,6 @@ export default function LoginScreen({ navigation, route }) {
             </Pressable>
           </View>
 
-          {/* BUTTON LOGIN */}
           <Pressable
             style={[styles.button, loading && { opacity: 0.7 }]}
             onPress={handleLogin}
@@ -130,6 +112,7 @@ export default function LoginScreen({ navigation, route }) {
             }}
           >
             <View style={{ flex: 1, height: 5, backgroundColor: "#D1D5DB" }} />
+
             <View style={{ flex: 1, height: 5, backgroundColor: "#D1D5DB" }} />
           </View>
 
@@ -147,7 +130,6 @@ export default function LoginScreen({ navigation, route }) {
           </Pressable>
         </View>
 
-        {/* FOOTER */}
         <View style={styles.footer}>
           <Image
             source={require("../../assets/leaf.png")}

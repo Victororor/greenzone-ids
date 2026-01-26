@@ -17,6 +17,11 @@ const { errorHandler, notFoundHandler } = require('./utils/errorHandler');
 const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
 const placeRoutes = require('./routes/place.routes');
+const reportRoutes = require('./routes/report.routes');
+const adminRoutes = require('./routes/admin.routes');
+const favoriteRoutes = require('./routes/favorite.routes');
+const placeSuggestionRoutes = require('./routes/placeSuggestion.routes');
+
 
 const app = express();
 
@@ -67,7 +72,11 @@ app.get('/', (req, res) => {
             health: '/health',
             auth: '/api/auth',
             users: '/api/users',
-            places: '/api/places'
+            places: '/api/places',
+            favorites: '/api/favorites',
+            reports: '/api/reports',
+            admin: '/api/admin',
+            placeSuggestions: '/api/place-suggestions'
         }
     });
 });
@@ -81,6 +90,10 @@ app.get('/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/places', placeRoutes);
+app.use('/api/favorites', favoriteRoutes);
+app.use('/api/reports', reportRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/placeSuggestion', placeSuggestionRoutes);
 
 // 404 handler
 app.use(notFoundHandler);

@@ -1,64 +1,80 @@
-import React, { useEffect, useState } from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React, { useEffect } from "react";
+import { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-import LoginScreen from "../screens/LoginScreen";
-import RegisterScreen from "../screens/RegisterScreen";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MapScreen from "../screens/MapScreen";
 import FavouriteScreen from "../screens/FavouriteScreen";
 import ProfileScreen from "../screens/ProfileScreen";
-import { Pressable } from "react-native";
-
+import PersonalInformationScreen from "../screens/PersonalInformationScreen";
+import InfoAppScreen from "../screens/InfoAppScreen";
+import SendingPlaceScreen from "../screens/SendingPlaceScreen";
+import { useNavigation } from "@react-navigation/native";
 
 const Stack = createNativeStackNavigator();
 
-function AuthStack({ setIsLogged }) {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen
-        name="Login"
-        component={LoginScreen}
-        initialParams={{ setIsLogged }}
-      />
-      <Stack.Screen
-        name="Register"
-        component={RegisterScreen}
-        initialParams={{ setIsLogged }}
-      />
-    </Stack.Navigator>
-  );
-}
+{/* Navigator per l'utente */}
 
-function AppStack({ setIsLogged }) {
+export default function RootNavigator({ setRuolo }) {
   return (
-    <Stack.Navigator screenOptions={{headerBackVisible: false, headerLeft: () => null}}>
-      <Stack.Screen name="Map" component={MapScreen} />
-      <Stack.Screen name="Favourite" component={FavouriteScreen} />
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Map"
+        component={MapScreen}
+        options={{
+          headerShown: true,
+          headerBackVisible: false,
+          headerLeft: () => null,
+          headerTitleAlign: "center",
+          headerTintColor: "#14948B",
+        }}
+      />
+
+      <Stack.Screen
+        name="Favourite"
+        component={FavouriteScreen}
+        options={{
+          headerShown: false,
+          headerBackVisible: false,
+          headerLeft: () => null,
+        }}
+      />
+
       <Stack.Screen
         name="Profile"
-        component={ProfileScreen}
-        initialParams={{ setIsLogged }}
+        options={{
+          headerShown: false,
+          headerBackVisible: false,
+          headerLeft: () => null,
+        }}
+      >
+        {(props) => <ProfileScreen {...props} setRuolo={setRuolo} />}
+      </Stack.Screen>
+
+      <Stack.Screen
+        name="PersonalInformationScreen"
+        component={PersonalInformationScreen}
+        options={{
+          title: "Informazioni Personali",
+          headerBackTitle: "Indietro",
+        }}
+      />
+
+      <Stack.Screen
+        name="About"
+        component={InfoAppScreen}
+        options={{ title: "Info App", headerBackTitle: "Indietro" }}
+      />
+
+      <Stack.Screen
+        name="Sending"
+        component={SendingPlaceScreen}
+        options={{
+          title: "Segnalazione",
+          headerBackTitle: "Indietro",
+          headerTitleAlign: "center",
+          headerTintColor: "#14948B",
+        }}
       />
     </Stack.Navigator>
-  );
-}
-
-export default function RootNavigator() {
-  const [isLogged, setIsLogged] = useState(null);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      const value = await AsyncStorage.getItem("logged");
-      setIsLogged(value === "1");
-    };
-    checkAuth();
-  }, []);
-
-  if (isLogged === null) return null;
-
-  return isLogged ? (
-    <AppStack setIsLogged={setIsLogged} />
-  ) : (
-    <AuthStack setIsLogged={setIsLogged} />
   );
 }
